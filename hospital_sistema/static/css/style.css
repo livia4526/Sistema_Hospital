@@ -1,0 +1,668 @@
+/* ===== VARIÁVEIS GLOBAIS ===== */
+:root {
+    --primary-blue: #0066CC;
+    --primary-dark: #004999;
+    --primary-light: #E3F2FD;
+    --success-green: #4CAF50;
+    --warning-yellow: #FFC107;
+    --danger-red: #F44336;
+    --gray-light: #F5F5F5;
+    --gray-medium: #E0E0E0;
+    --gray-dark: #666666;
+    --text-dark: #333333;
+    --white: #FFFFFF;
+    --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    --shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.15);
+    --border-radius: 12px;
+    --border-radius-small: 8px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-dark) 100%);
+    min-height: 100vh;
+    color: var(--text-dark);
+}
+
+/* ===== TELA DE LOGIN ===== */
+.login-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-dark) 100%);
+    z-index: 1000;
+}
+
+.login-box {
+    background: var(--white);
+    border-radius: var(--border-radius);
+    padding: 48px;
+    width: 480px;
+    box-shadow: var(--shadow-hover);
+    text-align: center;
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.logo {
+    width: 80px;
+    height: 80px;
+    background: var(--primary-blue);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+}
+
+.logo span {
+    font-size: 32px;
+    font-weight: bold;
+    color: var(--white);
+}
+
+.login-box h1 {
+    color: var(--primary-blue);
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+.login-box p {
+    color: var(--gray-dark);
+    margin-bottom: 32px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--text-dark);
+}
+
+.input-group input {
+    width: 100%;
+    padding: 14px;
+    border: 2px solid var(--gray-medium);
+    border-radius: var(--border-radius-small);
+    font-size: 16px;
+    transition: all 0.3s;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+}
+
+.senha-requisito {
+    font-size: 12px;
+    color: var(--gray-dark);
+    margin-top: 5px;
+}
+
+.checkbox-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.esqueceu-senha {
+    color: var(--primary-blue);
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.btn-login {
+    width: 100%;
+    padding: 14px;
+    background: var(--primary-blue);
+    color: var(--white);
+    border: none;
+    border-radius: var(--border-radius-small);
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-bottom: 20px;
+}
+
+.btn-login:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+.divider {
+    text-align: center;
+    margin: 20px 0;
+    position: relative;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 45%;
+    height: 1px;
+    background: var(--gray-medium);
+}
+
+.divider::before {
+    left: 0;
+}
+
+.divider::after {
+    right: 0;
+}
+
+.divider span {
+    background: var(--white);
+    padding: 0 10px;
+    color: var(--gray-dark);
+}
+
+.btn-google {
+    width: 100%;
+    padding: 12px;
+    background: var(--white);
+    color: var(--text-dark);
+    border: 2px solid var(--gray-medium);
+    border-radius: var(--border-radius-small);
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-google:hover {
+    background: var(--gray-light);
+}
+
+.cadastrar-link {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.cadastrar-link a {
+    color: var(--primary-blue);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+/* ===== SISTEMA PRINCIPAL ===== */
+.main-system {
+    display: none;
+}
+
+.navbar {
+    background: var(--white);
+    padding: 16px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--shadow);
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--primary-blue);
+}
+
+.nav-user {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.btn-logout {
+    padding: 8px 20px;
+    background: var(--danger-red);
+    color: var(--white);
+    border: none;
+    border-radius: var(--border-radius-small);
+    cursor: pointer;
+}
+
+/* ===== DASHBOARD ===== */
+.dashboard {
+    padding: 24px;
+    max-height: calc(100vh - 70px);
+    overflow-y: auto;
+}
+
+/* Grid principal */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+/* Cards de estatísticas */
+.stats-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.stat-card {
+    background: var(--white);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+}
+
+.stat-card h4 {
+    color: var(--gray-dark);
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+.stat-number {
+    font-size: 32px;
+    font-weight: bold;
+    color: var(--primary-blue);
+}
+
+.stat-label {
+    font-size: 14px;
+    color: var(--gray-dark);
+    margin-top: 5px;
+}
+
+/* Seção de Metas */
+.metas-section {
+    background: var(--white);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+}
+
+.metas-section h3 {
+    color: var(--primary-blue);
+    margin-bottom: 16px;
+}
+
+.meta-item {
+    margin-bottom: 16px;
+}
+
+.meta-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.progress-bar {
+    background: var(--gray-medium);
+    border-radius: 10px;
+    height: 8px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    background: var(--primary-blue);
+    height: 100%;
+    border-radius: 10px;
+    transition: width 0.3s;
+}
+
+/* Alertas */
+.alertas-section {
+    background: var(--white);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+}
+
+.alertas-section h3 {
+    color: var(--primary-blue);
+    margin-bottom: 16px;
+}
+
+.alerta-item {
+    padding: 12px;
+    margin-bottom: 12px;
+    border-radius: var(--border-radius-small);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.alerta-urgente {
+    background: #FFEBEE;
+    border-left: 4px solid var(--danger-red);
+}
+
+.alerta-aviso {
+    background: #FFF8E1;
+    border-left: 4px solid var(--warning-yellow);
+}
+
+.alerta-info {
+    background: var(--primary-light);
+    border-left: 4px solid var(--primary-blue);
+}
+
+/* Agenda do dia */
+.agenda-dia {
+    background: var(--white);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.agenda-header {
+    padding: 20px;
+    border-bottom: 1px solid var(--gray-medium);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.agenda-header h3 {
+    color: var(--primary-blue);
+}
+
+.agenda-filtro {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-filtro {
+    padding: 6px 16px;
+    border: 1px solid var(--gray-medium);
+    background: var(--white);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-filtro.active {
+    background: var(--primary-blue);
+    color: var(--white);
+    border-color: var(--primary-blue);
+}
+
+.agenda-tabela {
+    overflow-x: auto;
+}
+
+.agenda-tabela table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.agenda-tabela th {
+    text-align: left;
+    padding: 15px;
+    background: var(--gray-light);
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.agenda-tabela td {
+    padding: 15px;
+    border-bottom: 1px solid var(--gray-medium);
+}
+
+.presente-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid var(--gray-medium);
+    background: var(--white);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.presente-btn.marcado {
+    background: var(--success-green);
+    border-color: var(--success-green);
+    color: var(--white);
+}
+
+.obs-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+/* Scroll da agenda */
+.agenda-scroll {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+/* Calendário semanal */
+.calendario-semanal {
+    background: var(--white);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    margin-top: 24px;
+}
+
+.calendario-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.semana-nav {
+    display: flex;
+    gap: 10px;
+}
+
+.semana-nav button {
+    padding: 6px 12px;
+    background: var(--gray-light);
+    border: none;
+    border-radius: var(--border-radius-small);
+    cursor: pointer;
+}
+
+.semana-scroll {
+    overflow-x: auto;
+}
+
+.semana-grid {
+    display: flex;
+    gap: 16px;
+    min-width: 800px;
+}
+
+.dia-card {
+    flex: 1;
+    background: var(--gray-light);
+    border-radius: var(--border-radius);
+    padding: 16px;
+    text-align: center;
+    min-width: 120px;
+}
+
+.dia-card .dia-nome {
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.dia-card .dia-status {
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 20px;
+    display: inline-block;
+    margin: 8px 0;
+}
+
+.status-tranquilo {
+    background: #E8F5E9;
+    color: var(--success-green);
+}
+
+.status-moderado {
+    background: #FFF8E1;
+    color: var(--warning-yellow);
+}
+
+.status-cheio {
+    background: #FFEBEE;
+    color: var(--danger-red);
+}
+
+.dia-card .dia-percentual {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 8px 0;
+}
+
+.dia-card .dia-consultas {
+    font-size: 12px;
+    color: var(--gray-dark);
+}
+
+/* Botões de ação */
+.botoes-acao {
+    display: flex;
+    gap: 16px;
+    margin-top: 24px;
+    justify-content: center;
+}
+
+.btn-acao {
+    padding: 12px 24px;
+    border: none;
+    border-radius: var(--border-radius-small);
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-consulta {
+    background: var(--primary-blue);
+    color: var(--white);
+}
+
+.btn-cirurgia {
+    background: var(--warning-yellow);
+    color: var(--text-dark);
+}
+
+.btn-paciente {
+    background: var(--success-green);
+    color: var(--white);
+}
+
+/* Rodapé */
+.footer {
+    background: var(--white);
+    padding: 20px;
+    text-align: center;
+    margin-top: 24px;
+    border-radius: var(--border-radius);
+    color: var(--gray-dark);
+    font-size: 14px;
+}
+
+/* ===== MODAIS ===== */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: var(--white);
+    border-radius: var(--border-radius);
+    width: 500px;
+    max-width: 90%;
+    max-height: 80%;
+    overflow-y: auto;
+}
+
+.modal-header {
+    padding: 20px;
+    border-bottom: 1px solid var(--gray-medium);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.modal-footer {
+    padding: 20px;
+    border-top: 1px solid var(--gray-medium);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* ===== UTILITÁRIOS ===== */
+.hidden {
+    display: none !important;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
+}

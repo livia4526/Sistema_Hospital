@@ -1,0 +1,303 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="main-system">
+    <nav class="navbar">
+        <div class="nav-brand">
+            <i class="fas fa-hospital-user"></i>
+            <span>HOS - Hospital de Olhos de Sergipe</span>
+        </div>
+        <div class="nav-user">
+            <span>👋 Bem-vindo, <span id="currentUser"></span></span>
+            <button class="btn-logout" onclick="fazerLogout()">Sair</button>
+        </div>
+    </nav>
+    
+    <div class="dashboard" style="max-width: 800px; margin: 0 auto;">
+        <div class="card">
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 30px;">
+                <i class="fas fa-scalpel" style="font-size: 32px; color: var(--warning-yellow);"></i>
+                <h2 style="color: var(--warning-yellow); margin: 0;">Nova Cirurgia</h2>
+            </div>
+            
+            <form id="cirurgiaForm">
+                <div id="dadosPacienteContainer" style="display: none;">
+                    <h3 style="margin-bottom: 15px;">Dados do Paciente</h3>
+                    <div class="row" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                        <div class="form-group">
+                            <label>Nome</label>
+                            <input type="text" id="pacienteNome" class="form-input" readonly style="background: var(--gray-light);">
+                        </div>
+                        <div class="form-group">
+                            <label>Celular</label>
+                            <input type="text" id="pacienteCelular" class="form-input telefone-input" readonly style="background: var(--gray-light);">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Plano</label>
+                        <input type="text" id="pacientePlano" class="form-input" readonly style="background: var(--gray-light);">
+                    </div>
+                    <input type="hidden" id="pacienteId">
+                    <hr style="margin: 20px 0;">
+                </div>
+                
+                <div id="buscaPacienteContainer">
+                    <div class="form-group">
+                        <label>Buscar paciente</label>
+                        <input type="text" id="buscaPacienteInput" class="form-input" placeholder="Digite nome ou CPF">
+                        <button type="button" class="btn btn-primary" onclick="buscarPacienteParaCirurgia()" style="margin-top: 10px;">Buscar</button>
+                    </div>
+                    <div id="resultadoBuscaPaciente" style="margin-top: 20px;"></div>
+                    <hr style="margin: 20px 0;">
+                </div>
+                
+                <h3 style="margin-bottom: 15px;">Dados da Cirurgia</h3>
+                
+                <div class="row" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                    <div class="form-group">
+                        <label>Data *</label>
+                        <input type="text" id="dataCirurgia" class="form-input" placeholder="Selecione a data" readonly required>
+                    </div>
+                    <div class="form-group">
+                        <label>Horário *</label>
+                        <div class="select-wrapper">
+                            <select id="horarioCirurgia" class="form-select" required>
+                                <option value="">Selecione um horário</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Olho *</label>
+                    <div class="radio-group" style="display: flex; gap: 20px; flex-wrap: wrap;">
+                        <label class="radio-label">
+                            <input type="radio" name="olho" value="OD" required> OD (Olho Direito)
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="olho" value="OE"> OE (Olho Esquerdo)
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="olho" value="AO"> AO (Ambos os Olhos)
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Tipo de Cirurgia *</label>
+                    <div class="select-wrapper">
+                        <select id="tipoCirurgia" class="form-select" required>
+                            <option value="">Selecione o tipo</option>
+                            <option value="Catarata">Catarata</option>
+                            <option value="Miopia">Miopia</option>
+                            <option value="Glaucoma">Glaucoma</option>
+                            <option value="Retina">Retina</option>
+                            <option value="Estrabismo">Estrabismo</option>
+                            <option value="Córnea">Córnea</option>
+                            <option value="Outros">Outros</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group" id="outroCirurgiaContainer" style="display: none;">
+                    <label>Especifique o tipo</label>
+                    <input type="text" id="outroCirurgia" class="form-input" placeholder="Digite o tipo de cirurgia">
+                </div>
+                
+                <div class="form-group">
+                    <label>Precauções</label>
+                    <textarea id="precaucoesCirurgia" class="form-textarea" rows="3" placeholder="Jejum, medicamentos, preparos especiais..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Observação</label>
+                    <textarea id="observacaoCirurgia" class="form-textarea" rows="2" placeholder="Observações adicionais..."></textarea>
+                </div>
+                
+                <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px;">
+                    <button type="button" class="btn btn-secondary" onclick="voltar()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Agendar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    let pacienteSelecionadoId = null;
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        carregarUsuario();
+        configurarDatePicker('dataCirurgia', function(data) {
+            carregarHorariosDisponiveis(data);
+        });
+        
+        const pacienteData = sessionStorage.getItem('pacienteAgendamento');
+        if (pacienteData) {
+            const paciente = JSON.parse(pacienteData);
+            preencherDadosPaciente(paciente);
+            sessionStorage.removeItem('pacienteAgendamento');
+        }
+        
+        document.getElementById('tipoCirurgia').addEventListener('change', function() {
+            const outroContainer = document.getElementById('outroCirurgiaContainer');
+            if (this.value === 'Outros') {
+                outroContainer.style.display = 'block';
+            } else {
+                outroContainer.style.display = 'none';
+            }
+        });
+    });
+    
+    function carregarUsuario() {
+        fetch('/api/verificar_sessao')
+            .then(response => response.json())
+            .then(data => {
+                if (data.logado) {
+                    document.getElementById('currentUser').innerText = data.usuario;
+                }
+            });
+    }
+    
+    function buscarPacienteParaCirurgia() {
+        const termo = document.getElementById('buscaPacienteInput').value;
+        if (!termo || termo.length < 2) {
+            showNotification('Digite pelo menos 2 caracteres', 'warning');
+            return;
+        }
+        
+        fetch(`/api/pacientes/buscar?q=${encodeURIComponent(termo)}`)
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('resultadoBuscaPaciente');
+                if (data.pacientes.length === 0) {
+                    container.innerHTML = '<div class="alerta-item alerta-info">Nenhum paciente encontrado</div>';
+                    return;
+                }
+                
+                container.innerHTML = data.pacientes.map(p => `
+                    <div class="search-result-item" onclick="selecionarPacienteCirurgia(${p.id}, '${p.nome}', '${p.telefone}', '${p.plano || ''}')">
+                        <div class="search-result-name"><strong>${p.nome}</strong></div>
+                        <div class="search-result-info">CPF: ${p.cpf} | ${p.telefone} | ${p.plano || 'Sem plano'}</div>
+                    </div>
+                `).join('');
+            });
+    }
+    
+    function selecionarPacienteCirurgia(id, nome, telefone, plano) {
+        pacienteSelecionadoId = id;
+        
+        document.getElementById('buscaPacienteContainer').style.display = 'none';
+        document.getElementById('dadosPacienteContainer').style.display = 'block';
+        document.getElementById('pacienteNome').value = nome;
+        document.getElementById('pacienteCelular').value = telefone;
+        document.getElementById('pacientePlano').value = plano;
+        document.getElementById('pacienteId').value = id;
+    }
+    
+    function preencherDadosPaciente(paciente) {
+        pacienteSelecionadoId = paciente.id;
+        document.getElementById('buscaPacienteContainer').style.display = 'none';
+        document.getElementById('dadosPacienteContainer').style.display = 'block';
+        document.getElementById('pacienteNome').value = paciente.nome;
+        document.getElementById('pacienteCelular').value = paciente.telefone;
+        document.getElementById('pacientePlano').value = paciente.plano || 'Não informado';
+        document.getElementById('pacienteId').value = paciente.id;
+    }
+    
+    function carregarHorariosDisponiveis(data) {
+        fetch(`/api/horarios_disponiveis?data=${data}&tipo=cirurgia`)
+            .then(response => response.json())
+            .then(data => {
+                const select = document.getElementById('horarioCirurgia');
+                select.innerHTML = '<option value="">Selecione um horário</option>';
+                
+                data.horarios.forEach(horario => {
+                    const option = document.createElement('option');
+                    option.value = horario;
+                    option.textContent = horario;
+                    select.appendChild(option);
+                });
+            });
+    }
+    
+    document.getElementById('cirurgiaForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        if (!pacienteSelecionadoId && !document.getElementById('pacienteId').value) {
+            showNotification('Selecione um paciente primeiro', 'error');
+            return;
+        }
+        
+        const pacienteId = pacienteSelecionadoId || document.getElementById('pacienteId').value;
+        const data = document.getElementById('dataCirurgia').value;
+        const horario = document.getElementById('horarioCirurgia').value;
+        const olho = document.querySelector('input[name="olho"]:checked');
+        let tipoCirurgia = document.getElementById('tipoCirurgia').value;
+        const precaucoes = document.getElementById('precaucoesCirurgia').value;
+        const observacao = document.getElementById('observacaoCirurgia').value;
+        
+        if (!data || !horario || !olho || !tipoCirurgia) {
+            showNotification('Preencha todos os campos obrigatórios', 'error');
+            return;
+        }
+        
+        if (tipoCirurgia === 'Outros') {
+            tipoCirurgia = document.getElementById('outroCirurgia').value;
+            if (!tipoCirurgia) {
+                showNotification('Especifique o tipo de cirurgia', 'error');
+                return;
+            }
+        }
+        
+        const dados = {
+            paciente_id: pacienteId,
+            data: formatarDataParaInput(data),
+            horario: horario,
+            tipo: 'cirurgia',
+            olho: olho.value,
+            tipo_procedimento: tipoCirurgia,
+            precaucoes: precaucoes,
+            observacao: observacao,
+            is_encaixe: false
+        };
+        
+        showLoading();
+        
+        fetch('/api/agendamentos', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dados)
+        })
+        .then(response => response.json())
+        .then(data => {
+            hideLoading();
+            if (data.success) {
+                showNotification('Cirurgia agendada com sucesso!');
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 1500);
+            } else {
+                showNotification(data.error || 'Erro ao agendar cirurgia', 'error');
+            }
+        });
+    });
+    
+    function formatarDataParaInput(dataBr) {
+        const partes = dataBr.split('/');
+        if (partes.length === 3) {
+            return `${partes[2]}-${partes[1]}-${partes[0]}`;
+        }
+        return dataBr;
+    }
+    
+    function voltar() {
+        window.location.href = '/';
+    }
+    
+    function fazerLogout() {
+        fetch('/api/logout', { method: 'POST' })
+            .then(() => window.location.href = '/');
+    }
+</script>
+{% endblock %}

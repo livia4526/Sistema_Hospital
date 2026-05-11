@@ -1,0 +1,279 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="main-system">
+    <nav class="navbar">
+        <div class="nav-brand">
+            <i class="fas fa-hospital-user"></i>
+            <span>HOS - Hospital de Olhos de Sergipe</span>
+        </div>
+        <div class="nav-user">
+            <span>👋 Bem-vindo, <span id="currentUser">{{ session.username }}</span></span>
+            <button class="btn-logout" onclick="fazerLogout()">Sair</button>
+        </div>
+    </nav>
+    
+    <div class="dashboard">
+        <!-- Grid principal -->
+        <div class="dashboard-grid">
+            <!-- Coluna esquerda -->
+            <div>
+                <!-- Cards de estatísticas Hoje -->
+                <div class="stats-cards">
+                    <div class="stat-card">
+                        <h4>📊 Total</h4>
+                        <div class="stat-number" id="totalPacientes">0</div>
+                        <div class="stat-label">Pacientes hoje</div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>✅ Compareceram</h4>
+                        <div class="stat-number" id="compareceram">0</div>
+                        <div class="stat-label">Pacientes</div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>❌ Faltaram</h4>
+                        <div class="stat-number" id="faltaram">0</div>
+                        <div class="stat-label">Pacientes</div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>⏰ Pendentes</h4>
+                        <div class="stat-number" id="pendentes">0</div>
+                        <div class="stat-label">Aguardando</div>
+                    </div>
+                </div>
+                
+                <!-- Metas -->
+                <div class="metas-section">
+                    <h3>🎯 Metas</h3>
+                    <div class="meta-item">
+                        <div class="meta-info">
+                            <span>Consultas realizadas</span>
+                            <span id="metaConsultasTexto">0/0</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="metaConsultasBarra" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-info">
+                            <span>Cirurgias realizadas</span>
+                            <span id="metaCirurgiasTexto">0/0</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="metaCirurgiasBarra" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-info">
+                            <span>Satisfação</span>
+                            <span id="metaSatisfacaoTexto">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="metaSatisfacaoBarra" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Alertas -->
+                <div class="alertas-section">
+                    <h3>⚠️ Alertas</h3>
+                    <div id="alertasContainer"></div>
+                </div>
+            </div>
+            
+            <!-- Coluna direita - Agenda do dia -->
+            <div class="agenda-dia">
+                <div class="agenda-header">
+                    <h3 id="agendaTitulo">Agenda do dia</h3>
+                    <div class="agenda-filtro">
+                        <button class="btn-filtro active" onclick="filtrarAgenda('hoje')">Hoje</button>
+                        <button class="btn-filtro" onclick="filtrarAgenda('amanha')">Amanhã</button>
+                    </div>
+                </div>
+                <div class="agenda-scroll">
+                    <div class="agenda-tabela">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Paciente</th>
+                                    <th>Horário</th>
+                                    <th>Tipo</th>
+                                    <th>Presente?</th>
+                                    <th>Obs</th>
+                                </tr>
+                            </thead>
+                            <tbody id="agendaTabelaBody">
+                                <tr><td colspan="6" style="text-align: center;">Carregando...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div style="padding: 16px; text-align: center;">
+                    <button class="btn btn-primary" onclick="abrirModalEncaixe()">
+                        <i class="fas fa-plus"></i> Adicionar encaixe
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Calendário Semanal -->
+        <div class="calendario-semanal">
+            <div class="calendario-header">
+                <h3 id="semanaTitulo">Semana: Atual</h3>
+                <div class="semana-nav">
+                    <button onclick="mudarSemana(-1)">◀ Semana anterior</button>
+                    <button onclick="mudarSemana(1)">Próxima semana ▶</button>
+                </div>
+            </div>
+            <div class="semana-scroll">
+                <div class="semana-grid" id="semanaGrid">
+                    <!-- Dias da semana serão carregados via JS -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Botões de ação -->
+        <div class="botoes-acao">
+            <button class="btn-acao btn-consulta" onclick="abrirNovaConsulta()">
+                <i class="fas fa-stethoscope"></i> + Nova consulta
+            </button>
+            <button class="btn-acao btn-cirurgia" onclick="abrirNovaCirurgia()">
+                <i class="fas fa-scalpel"></i> + Nova cirurgia
+            </button>
+            <button class="btn-acao btn-paciente" onclick="abrirNovoPaciente()">
+                <i class="fas fa-user-plus"></i> + Novo paciente
+            </button>
+        </div>
+        
+        <!-- Rodapé -->
+        <div class="footer">
+            <p>HOS - Hospital de Olhos de Sergipe</p>
+            <p>© Copyright 2026 Vision One. Todos os direitos reservados.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Observação -->
+<div id="modalObservacao" class="modal">
+    <div class="modal-content modal-obs">
+        <div class="modal-header">
+            <h3>📝 Observação da consulta</h3>
+            <span class="close" onclick="fecharModal('modalObservacao')">&times;</span>
+        </div>
+        <div class="modal-body">
+            <textarea id="obsTextarea" class="obs-textarea" placeholder="Digite aqui suas observações sobre esta consulta..."></textarea>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="fecharModal('modalObservacao')">Cancelar</button>
+            <button class="btn btn-primary" id="salvarObservacao">Salvar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Encaixe -->
+<div id="modalEncaixe" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>📌 Adicionar Encaixe</h3>
+            <span class="close" onclick="fecharModal('modalEncaixe')">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>O paciente possui cadastro?</label>
+                <div class="radio-group">
+                    <label class="radio-label">
+                        <input type="radio" name="temCadastro" value="sim" onchange="toggleCadastroEncaixe('sim')"> Sim
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="temCadastro" value="nao" onchange="toggleCadastroEncaixe('nao')"> Não
+                    </label>
+                </div>
+            </div>
+            <div id="encaixeBuscaContainer" style="display: none;">
+                <div class="form-group">
+                    <label>Buscar paciente</label>
+                    <input type="text" id="encaixeBuscaInput" placeholder="Digite nome ou CPF" class="form-input">
+                    <button class="btn btn-primary mt-20" onclick="buscarPacienteEncaixe()">Buscar</button>
+                </div>
+                <div id="encaixeResultadosBusca"></div>
+            </div>
+            <div id="encaixeNovoContainer" style="display: none;">
+                <p>Redirecionando para cadastro de paciente...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Carregar dashboard ao iniciar
+document.addEventListener('DOMContentLoaded', function() {
+    carregarDashboard();
+});
+
+function abrirNovaConsulta() {
+    window.location.href = '/consulta/nova';
+}
+
+function abrirNovaCirurgia() {
+    window.location.href = '/cirurgia/nova';
+}
+
+function abrirNovoPaciente() {
+    window.location.href = '/paciente/novo';
+}
+
+function abrirModalEncaixe() {
+    document.getElementById('modalEncaixe').style.display = 'flex';
+}
+
+function toggleCadastroEncaixe(opcao) {
+    const buscaContainer = document.getElementById('encaixeBuscaContainer');
+    const novoContainer = document.getElementById('encaixeNovoContainer');
+    
+    if (opcao === 'sim') {
+        buscaContainer.style.display = 'block';
+        novoContainer.style.display = 'none';
+    } else {
+        buscaContainer.style.display = 'none';
+        novoContainer.style.display = 'block';
+        // Redirecionar para cadastro de paciente
+        setTimeout(() => {
+            sessionStorage.setItem('origemAgendamento', 'encaixe');
+            window.location.href = '/paciente/novo';
+        }, 1500);
+    }
+}
+
+function buscarPacienteEncaixe() {
+    const termo = document.getElementById('encaixeBuscaInput').value;
+    if (!termo) return;
+    
+    fetch(`/api/pacientes/buscar?q=${encodeURIComponent(termo)}`)
+        .then(response => response.json())
+        .then(data => {
+            const container = document.getElementById('encaixeResultadosBusca');
+            if (data.pacientes.length === 0) {
+                container.innerHTML = '<div class="alerta-item alerta-info">Nenhum paciente encontrado</div>';
+                return;
+            }
+            
+            container.innerHTML = data.pacientes.map(p => `
+                <div class="resultado-card" onclick="selecionarPacienteEncaixe(${p.id})">
+                    <strong>${p.nome}</strong><br>
+                    <small>CPF: ${p.cpf} | ${p.telefone}</small>
+                </div>
+            `).join('');
+        });
+}
+
+function selecionarPacienteEncaixe(pacienteId) {
+    sessionStorage.setItem('pacienteEncaixe', pacienteId);
+    window.location.href = `/consulta/nova?encaixe=true&data=${document.getElementById('agendaDate')?.value || ''}`;
+}
+
+function fazerLogout() {
+    fetch('/api/logout', { method: 'POST' })
+        .then(() => window.location.reload());
+}
+</script>
+{% endblock %}

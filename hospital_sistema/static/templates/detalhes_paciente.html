@@ -1,0 +1,336 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="main-system">
+    <nav class="navbar">
+        <div class="nav-brand">
+            <i class="fas fa-hospital-user"></i>
+            <span>HOS - Hospital de Olhos de Sergipe</span>
+        </div>
+        <div class="nav-user">
+            <span>👋 Bem-vindo, <span id="currentUser"></span></span>
+            <button class="btn-logout" onclick="fazerLogout()">Sair</button>
+        </div>
+    </nav>
+
+    <div class="dashboard" style="max-width: 900px; margin: 0 auto;">
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <i class="fas fa-user-circle" style="font-size: 48px; color: var(--primary-blue);"></i>
+                    <h2 style="color: var(--primary-blue); margin: 0;" id="pacienteNomeTitulo"></h2>
+                </div>
+                <button class="btn btn-primary" onclick="toggleEdicao()" id="btnEditar">
+                    <i class="fas fa-edit"></i> Editar
+                </button>
+            </div>
+            
+            <!-- Modo visualização -->
+            <div id="modoVisualizacao">
+                <div class="row" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                    <div class="col">
+                        <p><strong>📄 CPF:</strong> <span id="viewCpf"></span></p>
+                        <p><strong>📅 Data Nascimento:</strong> <span id="viewDataNascimento"></span></p>
+                        <p><strong>🎂 Idade:</strong> <span id="viewIdade"></span> anos</p>
+                        <p><strong>⚧ Sexo:</strong> <span id="viewSexo"></span></p>
+                    </div>
+                    <div class="col">
+                        <p><strong>📞 Telefone:</strong> <span id="viewTelefone"></span></p>
+                        <p><strong>📧 Email:</strong> <span id="viewEmail"></span></p>
+                        <p><strong>🏥 Plano:</strong> <span id="viewPlano"></span></p>
+                        <p><strong>📍 Endereço:</strong> <span id="viewEndereco"></span></p>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 20px; padding: 15px; background: var(--gray-light); border-radius: var(--border-radius-small);">
+                    <strong>📋 Informações Complementares:</strong><br>
+                    <span id="viewInfoComplementares"></span>
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <h3>📊 Histórico</h3>
+                    <div class="row-3" style="margin-top: 10px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                        <div class="stat-card">
+                            <div class="stat-number" id="viewTotalConsultas" style="font-size: 28px; font-weight: bold; color: var(--primary-blue);">0</div>
+                            <div class="stat-label">Consultas realizadas</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="viewTotalCirurgias" style="font-size: 28px; font-weight: bold; color: var(--warning-yellow);">0</div>
+                            <div class="stat-label">Cirurgias realizadas</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="viewTotalFaltas" style="font-size: 28px; font-weight: bold; color: var(--danger-red);">0</div>
+                            <div class="stat-label">Faltas</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <h3>📅 Histórico de Agendamentos</h3>
+                    <div class="agenda-scroll" style="max-height: 300px; overflow-y: auto;">
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr style="background: var(--gray-light);">
+                                    <th style="padding: 10px; text-align: left;">Data</th>
+                                    <th style="padding: 10px; text-align: left;">Horário</th>
+                                    <th style="padding: 10px; text-align: left;">Tipo</th>
+                                    <th style="padding: 10px; text-align: left;">Status</th>
+                                 </tr>
+                            </thead>
+                            <tbody id="historicoAgendamentos"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Modo edição -->
+            <div id="modoEdicao" style="display: none;">
+                <form id="edicaoForm">
+                    <div class="row" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                        <div class="form-group">
+                            <label>Nome *</label>
+                            <input type="text" id="editNome" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Data de Nascimento *</label>
+                            <input type="date" id="editDataNascimento" class="form-input" required>
+                        </div>
+                    </div>
+                    
+                    <div class="row" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                        <div class="form-group">
+                            <label>Sexo</label>
+                            <select id="editSexo" class="form-select">
+                                <option value="">Selecione</option>
+                                <option value="Feminino">Feminino</option>
+                                <option value="Masculino">Masculino</option>
+                                <option value="Outro">Outro</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Plano de Saúde</label>
+                            <select id="editPlano" class="form-select">
+                                <option value="">Selecione o plano</option>
+                                <option value="Unimed">Unimed</option>
+                                <option value="Hapvida">Hapvida</option>
+                                <option value="Bradesco">Bradesco</option>
+                                <option value="Plamed">Plamed</option>
+                                <option value="NotreDame">NotreDame</option>
+                                <option value="Particular">Particular</option>
+                                <option value="Outros">Outros</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                        <div class="form-group">
+                            <label>Telefone *</label>
+                            <input type="tel" id="editTelefone" class="form-input telefone-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="editEmail" class="form-input">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>CPF *</label>
+                        <input type="text" id="editCpf" class="form-input cpf-input" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Informações complementares</label>
+                        <textarea id="editInfoComplementares" class="form-textarea" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Endereço</label>
+                        <textarea id="editEndereco" class="form-textarea" rows="2"></textarea>
+                    </div>
+                    
+                    <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px;">
+                        <button type="button" class="btn btn-secondary" onclick="toggleEdicao()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Salvar alterações</button>
+                    </div>
+                </form>
+            </div>
+            
+            <div style="margin-top: 30px; text-align: center;">
+                <button class="btn btn-secondary" onclick="voltar()">
+                    <i class="fas fa-arrow-left"></i> Voltar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var pacienteId = "{{ paciente_id }}";
+    var pacienteData = null;
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        carregarDadosPaciente();
+        carregarUsuario();
+
+        document.getElementById('edicaoForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            var dados = {
+                nome: document.getElementById('editNome').value,
+                data_nascimento: document.getElementById('editDataNascimento').value,
+                sexo: document.getElementById('editSexo').value,
+                plano: document.getElementById('editPlano').value,
+                telefone: document.getElementById('editTelefone').value,
+                email: document.getElementById('editEmail').value,
+                cpf: document.getElementById('editCpf').value,
+                info_complementares: document.getElementById('editInfoComplementares').value,
+                endereco: document.getElementById('editEndereco').value
+            };
+            
+            var cpfNumeros = dados.cpf.replace(/\D/g, '');
+            if (cpfNumeros.length !== 11) {
+                showNotification('CPF inválido', 'error');
+                return;
+            }
+            
+            showLoading();
+            
+            fetch('/api/pacientes/' + pacienteId, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dados)
+            })
+            .then(function(response) { return response.json(); })
+            .then(function(data) {
+                hideLoading();
+                if (data.success) {
+                    showNotification('Dados atualizados com sucesso!');
+                    toggleEdicao();
+                    carregarDadosPaciente();
+                } else {
+                    showNotification(data.error || 'Erro ao atualizar', 'error');
+                }
+            })
+            .catch(function(error) {
+                hideLoading();
+                console.error('Erro:', error);
+                showNotification('Erro ao atualizar paciente', 'error');
+            });
+        });
+    });
+    
+    function carregarUsuario() {
+        fetch('/api/verificar_sessao')
+            .then(function(response) { return response.json(); })
+            .then(function(data) {
+                if (data.logado) {
+                    document.getElementById('currentUser').innerText = data.usuario;
+                }
+            });
+    }
+    
+    function formatarData(dataISO) {
+        if (!dataISO) return '';
+        var partes = dataISO.split('-');
+        if (partes.length === 3) {
+            return partes[2] + '/' + partes[1] + '/' + partes[0];
+        }
+        return dataISO;
+    }
+    
+    function carregarDadosPaciente() {
+        showLoading();
+        
+        fetch('/api/pacientes/' + pacienteId)
+            .then(function(response) { return response.json(); })
+            .then(function(paciente) {
+                hideLoading();
+                pacienteData = paciente;
+                
+                document.getElementById('pacienteNomeTitulo').innerText = paciente.nome;
+                document.getElementById('viewCpf').innerText = paciente.cpf;
+                document.getElementById('viewDataNascimento').innerText = formatarData(paciente.data_nascimento);
+                document.getElementById('viewIdade').innerText = paciente.idade || calcularIdade(paciente.data_nascimento);
+                document.getElementById('viewSexo').innerText = paciente.sexo || 'Não informado';
+                document.getElementById('viewTelefone').innerText = paciente.telefone;
+                document.getElementById('viewEmail').innerText = paciente.email || 'Não informado';
+                document.getElementById('viewPlano').innerText = paciente.plano || 'Não informado';
+                document.getElementById('viewEndereco').innerText = paciente.endereco || 'Não informado';
+                document.getElementById('viewInfoComplementares').innerText = paciente.info_complementares || 'Nenhuma';
+                document.getElementById('viewTotalConsultas').innerText = paciente.total_consultas || 0;
+                document.getElementById('viewTotalCirurgias').innerText = paciente.total_cirurgias || 0;
+                document.getElementById('viewTotalFaltas').innerText = paciente.total_faltas || 0;
+                
+                var historicoContainer = document.getElementById('historicoAgendamentos');
+                if (paciente.agendamentos && paciente.agendamentos.length > 0) {
+                    var historicoHtml = '';
+                    for (var i = 0; i < paciente.agendamentos.length; i++) {
+                        var a = paciente.agendamentos[i];
+                        historicoHtml += '<tr>' +
+                            '<td style="padding: 10px;">' + formatarData(a.data) + '</td>' +
+                            '<td style="padding: 10px;">' + a.horario + '</td>' +
+                            '<td style="padding: 10px;">' + (a.tipo === 'consulta' ? '🩺 Consulta' : '🔪 Cirurgia') + '</td>' +
+                            '<td style="padding: 10px;">' + (a.status === 'realizada' ? '✅ Realizada' : (a.status === 'faltou' ? '❌ Faltou' : '📅 Agendada')) + '</td>' +
+                        '</tr>';
+                    }
+                    historicoContainer.innerHTML = historicoHtml;
+                } else {
+                    historicoContainer.innerHTML = '<tr><td colspan="4" style="padding: 20px; text-align: center;">Nenhum agendamento encontrado</td></tr>';
+                }
+                
+                document.getElementById('editNome').value = paciente.nome;
+                document.getElementById('editDataNascimento').value = paciente.data_nascimento;
+                document.getElementById('editSexo').value = paciente.sexo || '';
+                document.getElementById('editPlano').value = paciente.plano || '';
+                document.getElementById('editTelefone').value = paciente.telefone;
+                document.getElementById('editEmail').value = paciente.email || '';
+                document.getElementById('editCpf').value = paciente.cpf;
+                document.getElementById('editInfoComplementares').value = paciente.info_complementares || '';
+                document.getElementById('editEndereco').value = paciente.endereco || '';
+            })
+            .catch(function(error) {
+                hideLoading();
+                console.error('Erro:', error);
+                showNotification('Erro ao carregar dados do paciente', 'error');
+            });
+    }
+    
+    function calcularIdade(dataNascimento) {
+        var hoje = new Date();
+        var nascimento = new Date(dataNascimento);
+        var idade = hoje.getFullYear() - nascimento.getFullYear();
+        var mes = hoje.getMonth() - nascimento.getMonth();
+        if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) {
+            idade--;
+        }
+        return idade;
+    }
+    
+    function toggleEdicao() {
+        var viewDiv = document.getElementById('modoVisualizacao');
+        var editDiv = document.getElementById('modoEdicao');
+        var btnEditar = document.getElementById('btnEditar');
+        
+        if (viewDiv.style.display === 'none') {
+            viewDiv.style.display = 'block';
+            editDiv.style.display = 'none';
+            btnEditar.innerHTML = '<i class="fas fa-edit"></i> Editar';
+        } else {
+            viewDiv.style.display = 'none';
+            editDiv.style.display = 'block';
+            btnEditar.innerHTML = '<i class="fas fa-times"></i> Cancelar edição';
+        }
+    }
+    
+    function voltar() {
+        window.location.href = '/';
+    }
+    
+    function fazerLogout() {
+        fetch('/api/logout', { method: 'POST' })
+            .then(function() { window.location.href = '/'; });
+    }
+</script>
+
+{% endblock %}
