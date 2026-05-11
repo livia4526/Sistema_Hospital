@@ -183,17 +183,20 @@ python app.py
 # http://localhost:5000
 
 🔑 Credenciais de Acesso
-Usuário	Senha
+Usuário	      Senha
 admin@hos.com	admin123
 ⚠️ Importante: Altere a senha do administrador após o primeiro acesso.
 
 📐 Regras de Negócio
+
 Limites de Agendamento
-Tipo	Limite Diário
-Consultas normais	20 por dia
-Encaixes	5 por dia
-Total de consultas	25 por dia
-Cirurgias	6 por dia
+
+Tipo	              Limite Diário
+Consultas normais	  20 por dia
+Encaixes	          5 por dia
+Total de consultas  25 por dia
+Cirurgias	          6 por dia
+
 Regras Importantes
 ❌ Não é possível ter consultas e cirurgias no mesmo dia
 
@@ -202,6 +205,7 @@ Regras Importantes
 🔄 Cirurgias ocupam o centro cirúrgico por períodos mais longos
 
 Validações
+
 ✅ CPF deve ter 11 dígitos
 
 ✅ Email deve conter "@" e "."
@@ -211,6 +215,7 @@ Validações
 ✅ Não permite duplicidade de CPF
 
 🔮 Próximas Implementações
+
 Cadastro de múltiplos usuários (secretárias)
 
 Tela de configurações do sistema
@@ -227,4 +232,4 @@ Backup automático do banco de dados
 
 Modo escuro
 
-Integração com agenda do Google ```
+Integração com agenda do Google 
