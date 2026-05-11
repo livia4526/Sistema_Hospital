@@ -10,22 +10,6 @@ Sistema de gerenciamento hospitalar desenvolvido para o **Hospital de Olhos de S
 
 ---
 
-## 📋 Índice
-
-- [Sobre o Projeto](#sobre-o-projeto)
-- [Telas do Sistema](#telas-do-sistema)
-- [Tecnologias Utilizadas](#tecnologias-utilizadas)
-- [Funcionalidades](#funcionalidades)
-- [Estrutura do Projeto](#estrutura-do-projeto)
-- [Pré-requisitos](#pré-requisitos)
-- [Instalação e Execução](#instalação-e-execução)
-- [Credenciais de Acesso](#credenciais-de-acesso)
-- [Regras de Negócio](#regras-de-negócio)
-- [Próximas Implementações](#próximas-implementações)
-- [Licença](#licença)
-
----
-
 ## 📖 Sobre o Projeto
 
 O **HOS** é um sistema de gerenciamento hospitalar desenvolvido sob medida para otimizar o fluxo de trabalho de secretárias e médicos do Hospital de Olhos de Sergipe. O sistema permite:
@@ -243,6 +227,6 @@ Backup automático do banco de dados
 
 Modo escuro
 
-Integração com agenda do Google ```
+Integração com agenda do Google 
 
-<p align="center">Feito com ❤️ para o Hospital de Olhos de Sergipe</p>
+<p align="center">Feito com ❤️ para o Hospital de Olhos de Sergipe</p> ```
