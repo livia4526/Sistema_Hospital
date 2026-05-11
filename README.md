@@ -194,10 +194,11 @@ Limites de Agendamento
 Tipo	              Limite Diário
 Consultas normais	  20 por dia
 Encaixes	          5 por dia
-Total de consultas  25 por dia
+Total de consultas    25 por dia
 Cirurgias	          6 por dia
 
 Regras Importantes
+
 ❌ Não é possível ter consultas e cirurgias no mesmo dia
 
 ⚠️ O sistema avisa quando o limite está próximo ou atingido
