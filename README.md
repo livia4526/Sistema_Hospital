@@ -227,6 +227,4 @@ Backup automático do banco de dados
 
 Modo escuro
 
-Integração com agenda do Google 
-
-<p align="center">Feito com ❤️ para o Hospital de Olhos de Sergipe</p> ```
+Integração com agenda do Google ```
