@@ -1,236 +1,139 @@
-# 🏥 HOS - Hospital de Olhos de Sergipe
+<div align="center">
 
-Sistema de gerenciamento hospitalar desenvolvido para o **Hospital de Olhos de Sergipe (HOS)**. Uma solução completa para secretárias e médicos gerenciarem pacientes, consultas, cirurgias e agenda.
+# 🏥 Sistema Hospital
 
-![Status](https://img.shields.io/badge/status-em%20desenvolvimento-green)
-![Python](https://img.shields.io/badge/Python-3.11%2B-blue)
-![Flask](https://img.shields.io/badge/Flask-2.3.3-blue)
-![SQLite](https://img.shields.io/badge/SQLite-3.0-blue)
-![License](https://img.shields.io/badge/license-Apache%202.0-blue)
+**Agenda e gestão de pacientes para a recepção de um hospital de olhos**
 
----
+<img src="https://skillicons.dev/icons?i=django,react,ts,postgres,python&perline=5" alt="Django, React, TypeScript, PostgreSQL, Python" />
 
-## 📖 Sobre o Projeto
+![Status](https://img.shields.io/badge/status-em%20migração%20para%20v2-6A1B9A?style=flat-square)
+![License](https://img.shields.io/badge/license-Apache%202.0-blue?style=flat-square)
 
-O **HOS** é um sistema de gerenciamento hospitalar desenvolvido sob medida para otimizar o fluxo de trabalho de secretárias e médicos do Hospital de Olhos de Sergipe. O sistema permite:
-
-- ✅ Cadastro completo de pacientes
-- ✅ Agendamento de consultas e cirurgias
-- ✅ Controle de agenda diária com limites
-- ✅ Histórico de atendimentos
-- ✅ Alertas e lembretes automáticos
-- ✅ Estatísticas e metas
+</div>
 
 ---
 
-## 🖥️ Telas do Sistema
+## 💡 Sobre
 
-| Tela | Descrição |
-|------|-----------|
-| **Login** | Autenticação de usuários com validação de senha |
-| **Dashboard** | Visão geral: estatísticas, metas, alertas e agenda do dia |
-| **Verificar Cadastro** | Pergunta se paciente já existe no sistema |
-| **Nova Consulta** | Agendamento de consultas médicas |
-| **Nova Cirurgia** | Agendamento de procedimentos cirúrgicos |
-| **Novo Paciente** | Cadastro de novos pacientes |
-| **Busca de Pacientes** | Pesquisa por nome ou CPF |
-| **Detalhes do Paciente** | Informações completas + edição |
+Projeto de estudo que nasceu de um problema real: ajudar a minha mãe, que é secretária em um hospital de olhos, a organizar o dia a dia da recepção. Ela precisa cadastrar pacientes, marcar consultas e cirurgias, controlar quem compareceu e não estourar o limite de atendimentos do dia — tudo isso, hoje, com muita coisa feita à mão.
+
+> ⚠️ Projeto acadêmico e pessoal, **sem vínculo oficial** com nenhum hospital. Nenhum dado real de paciente é usado.
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## 📈 Evolução do projeto
 
-### Backend
-- **Python 3.11+** - Linguagem principale
-- **Flask 2.3.3** - Framework web
-- **SQLite3** - Banco de dados local
-- **Werkzeug** - Segurança e hashing de senhas
+| | v1 — onde comecei | v2 — para onde estou levando |
+|---|---|---|
+| **Back-end** | Flask com rotas escritas à mão | Django + Django REST Framework |
+| **Front-end** | HTML + CSS + JavaScript puro | React + TypeScript |
+| **Banco** | SQLite (arquivo local) | PostgreSQL |
+| **Login** | Implementado do zero | Autenticação do Django |
+| **Regras de negócio** | Espalhadas entre as rotas | Centralizadas e cobertas por testes |
 
-### Frontend
-- **HTML5** - Estrutura das páginas
-- **CSS3** - Estilização e layout responsivo
-- **JavaScript (Vanilla)** - Interatividade e requisições AJAX
+A **v1** foi feita quando eu só conhecia HTML, CSS e JavaScript: funcionou, mas o código ficou difícil de manter. Depois de aprender React, TypeScript e Django, decidi reconstruir o sistema separando **back-end (API)** e **front-end**, com um banco de dados de verdade e as regras do hospital testadas automaticamente.
 
-### Bibliotecas Adicionais
-- **Font Awesome 6** - Ícones
-- **Google Fonts** - Tipografia moderna
+A versão original continua guardada na branch [`v1-flask`](../../tree/v1-flask).
 
 ---
 
 ## ✨ Funcionalidades
 
-### 🔐 Autenticação
-- Login com usuário e senha
-- Validação de senha (mínimo 8 caracteres com letras, números e símbolos)
-- Integração com Google (mock)
-
-### 👥 Gestão de Pacientes
-- Cadastro completo (nome, CPF, telefone, email, plano de saúde)
-- Validação de CPF (11 dígitos)
-- Validação de email (formato válido)
-- Máscaras automáticas para CPF e telefone
-- Edição de dados cadastrais
-- Histórico de atendimentos
-
-### 🩺 Agendamento de Consultas
-- Busca de pacientes cadastrados
-- Seleção de data via calendário visual
-- Seleção de horários disponíveis (08:00 às 18:00)
-- Motivo da consulta
-- Observações adicionais
-
-### 🔪 Agendamento de Cirurgias
-- Busca de pacientes cadastrados
-- Seleção de data via calendário visual
-- Seleção de horários disponíveis (apenas horários inteiros)
-- Olho a ser operado (OD, OE, AO)
-- Tipo de cirurgia (Catarata, Miopia, Glaucoma, etc.)
-- Precauções e preparos especiais
-
-### 📅 Agenda
-- Visualização diária da agenda
-- Filtro: Hoje / Amanhã
-- Marcação de presença (✅ compareceu / ❌ faltou)
-- Observações por consulta (ícone de caneta)
-- Scroll vertical para dias cheios (até 25 pacientes)
-- Destaque visual para encaixes (azul escuro)
-
-### 📆 Calendário Semanal
-- Visualização dos próximos 7 dias
-- Cores por nível de ocupação:
-  - 🟢 **Tranquilo** (≤ 50% ocupado)
-  - 🟡 **Moderado** (51-80% ocupado)
-  - 🔴 **Cheio** (≥ 81% ocupado)
-- Scroll horizontal para navegação
-- Seletor de semana (Atual / Próxima)
-
-### 📊 Dashboard
-- Estatísticas do dia (Total, Compareceram, Faltaram, Pendentes)
-- Metas mensais (Consultas, Cirurgias, Satisfação)
-- Alertas importantes (cancelamentos, aniversariantes, confirmações)
-
-### 💬 Notificações
-- Lembretes automáticos (simulado)
-- WhatsApp (integração simulada)
-- Email (integração simulada)
+- 🔐 **Login** das secretárias
+- 👥 **Pacientes** — cadastro, busca por nome ou CPF, edição e histórico de atendimentos
+- 🩺 **Consultas** — escolha de data no calendário e horários livres das 08h às 18h
+- 👁️ **Cirurgias** — olho operado (OD, OE, AO), tipo de procedimento e preparos
+- 📅 **Agenda do dia** — marcação de presença ✅ / falta ❌ e observações por paciente
+- 📆 **Calendário semanal** colorido pela ocupação: 🟢 tranquilo · 🟡 moderado · 🔴 cheio
+- 📊 **Dashboard** — atendimentos do dia, metas do mês e alertas (aniversariantes, cancelamentos)
 
 ---
 
-## 📁 Estrutura do Projeto
+## 📐 Regras de negócio
 
-hospital_sistema/
-│
-├── app.py # Backend principal (Flask)
-├── requirements.txt # Dependências do projeto
-├── database.py # Gerenciamento do banco de dados SQLite
-├── utils.py # Funções utilitárias
-├── hospital.db # Banco de dados (criado automaticamente)
-│
-├── static/
-│ ├── css/
-│ │ ├── style.css
-│ │ ├── components.css
-│ │ ├── dashboard.css
-│ │ ├── forms.css
-│ │ └── calendar.css
-│ │
-│ ├── js/
-│ │ ├── main.js
-│ │ ├── api.js
-│ │ ├── dashboard.js
-│ │ ├── calendar.js
-│ │ ├── forms.js
-│ │ ├── busca.js
-│ │ └── whatsapp.js
-│ │
-│ └── assets/
-│
-└── templates/
-├── base.html
-├── login.html
-├── dashboard.html
-├── verificar_cadastro.html
-├── nova_consulta.html
-├── nova_cirurgia.html
-├── novo_paciente.html
-├── busca_resultados.html
-└── detalhes_paciente.html
+| Regra | Limite |
+|---|---|
+| Consultas normais | 20 por dia |
+| Encaixes | 5 por dia |
+| Cirurgias | 6 por dia |
+| Consulta e cirurgia no mesmo dia | ❌ não permitido |
+| CPF duplicado | ❌ não permitido |
 
+O sistema avisa quando um dia está chegando no limite.
 
 ---
 
-## 📋 Pré-requisitos
+## 📁 Estrutura
 
-- **Python 3.11 ou superior** - [Download Python](https://www.python.org/downloads/)
-- **Pip** - Gerenciador de pacotes do Python
+```
+Sistema_Hospital/
+├── backend/                # API em Django + DRF
+│   ├── config/             # configurações e rotas principais
+│   ├── pacientes/          # cadastro, busca e histórico
+│   ├── agenda/             # consultas, cirurgias, limites e calendário
+│   ├── dashboard/          # estatísticas, metas e alertas
+│   ├── manage.py
+│   └── requirements.txt
+│
+├── frontend/               # interface em React + TypeScript (Vite)
+│   └── src/
+│       ├── api/            # comunicação com o back-end
+│       ├── components/     # peças reutilizáveis (calendário, lista de horários, modal)
+│       ├── pages/          # telas: Login, Dashboard, Pacientes, Agendamento
+│       ├── types/          # tipos TypeScript (Paciente, Agendamento...)
+│       └── styles/
+│
+├── .env.example            # modelo das variáveis de ambiente
+├── .gitignore
+├── LICENSE
+└── README.md
+```
 
 ---
 
-## 🚀 Instalação e Execução
+## 🚀 Como rodar
+
+**Pré-requisitos:** Python 3.11+, Node.js 20+ e PostgreSQL.
 
 ```bash
 # 1. Clone o repositório
-git clone https://github.com/seu-usuario/hospital_sistema.git
-cd hospital_sistema
+git clone https://github.com/livia4526/Sistema_Hospital.git
+cd Sistema_Hospital
 
-# 2. Instale as dependências
-pip install flask
+# 2. Back-end
+cd backend
+python -m venv venv
+source venv/bin/activate        # no Windows: venv\Scripts\activate
+pip install -r requirements.txt
+cp ../.env.example .env          # preencha com os dados do seu banco
+python manage.py migrate
+python manage.py createsuperuser
+python manage.py runserver       # http://localhost:8000
 
-# 3. Execute o sistema
-python app.py
+# 3. Front-end (em outro terminal)
+cd frontend
+npm install
+npm run dev                      # http://localhost:5173
+```
 
-# 4. Acesse no navegador
-# http://localhost:5000
+---
 
-🔑 Credenciais de Acesso
-Usuário	      Senha
-admin@hos.com	admin123
-⚠️ Importante: Altere a senha do administrador após o primeiro acesso.
+## 🗺️ Roteiro da v2
 
-📐 Regras de Negócio
+- [ ] Estrutura do back-end em Django + PostgreSQL
+- [ ] API de pacientes
+- [ ] API de agendamentos com os limites diários e testes
+- [ ] Telas em React: login, dashboard, cadastro e agendamento
+- [ ] Calendário semanal e agenda do dia
+- [ ] Cadastro de várias secretárias
+- [ ] Relatórios em PDF/CSV
+- [ ] Lembretes reais por WhatsApp e e-mail
+- [ ] Modo escuro
 
-Limites de Agendamento
+---
 
-Tipo	              Limite Diário
-Consultas normais	  20 por dia
-Encaixes	          5 por dia
-Total de consultas    25 por dia
-Cirurgias	          6 por dia
+<div align="center">
 
-Regras Importantes
+Feito com 💜 por [Lívia](https://github.com/livia4526) · Licença [Apache 2.0](LICENSE)
 
-❌ Não é possível ter consultas e cirurgias no mesmo dia
-
-⚠️ O sistema avisa quando o limite está próximo ou atingido
-
-🔄 Cirurgias ocupam o centro cirúrgico por períodos mais longos
-
-Validações
-
-✅ CPF deve ter 11 dígitos
-
-✅ Email deve conter "@" e "."
-
-✅ Telefone com máscara automática
-
-✅ Não permite duplicidade de CPF
-
-🔮 Próximas Implementações
-
-Cadastro de múltiplos usuários (secretárias)
-
-Tela de configurações do sistema
-
-Perfil do usuário
-
-Relatórios avançados (exportação PDF/CSV)
-
-Envio real de WhatsApp (integração com API)
-
-Envio real de email (SMTP)
-
-Backup automático do banco de dados
-
-Modo escuro
-
-Integração com agenda do Google 
+</div>
