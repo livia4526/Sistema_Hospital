@@ -65,7 +65,6 @@ async function enviarWhatsApp(numero, mensagem) {
     
     // Simular envio (em produção, chamar API real)
     try {
-        // Aqui você implementaria a chamada real para a API do WhatsApp
         // Exemplo com Twilio:
         // await fetch('/api/whatsapp/enviar', {
         //     method: 'POST',
