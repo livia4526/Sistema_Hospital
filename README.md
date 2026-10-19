@@ -1,8 +1,8 @@
 <div align="center">
 
-# 🏥 Sistema Hospital
+# 🏥 Íris 
 
-**Agenda e gestão de pacientes para a recepção de um hospital de olhos**
+**Agenda inteligente para clínicas de oftalmologia**
 
 <img src="https://skillicons.dev/icons?i=django,react,ts,postgres,python&perline=5" alt="Django, React, TypeScript, PostgreSQL, Python" />
 
