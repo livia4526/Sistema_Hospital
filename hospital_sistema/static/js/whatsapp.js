@@ -10,7 +10,7 @@ const WHATSAPP_CONFIG = {
         const tipo = agendamento.tipo === 'consulta' ? 'consulta' : 'cirurgia';
         return `Olá ${paciente.nome}! 🌟\n\n` +
                `Lembrando da sua ${tipo} agendada para o dia ${dataFormatada} às ${agendamento.horario}.\n\n` +
-               `📍 Local: HOS - Hospital de Olhos de Sergipe\n` +
+               `📍 Local: Íris - Clínica de Oftalmologia\n` +
                `📞 Dúvidas? Ligue (79) 99999-9999\n\n` +
                `Confirme sua presença respondendo:\n` +
                `1️⃣ - Confirmar presença\n` +
