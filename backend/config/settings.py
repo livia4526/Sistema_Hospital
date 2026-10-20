@@ -147,3 +147,10 @@ MAILERS = {
 
 # Permite que o front-end em React (Vite) converse com a API
 CORS_ALLOWED_ORIGINS = ["http://localhost:5173"]
+
+
+# Django REST Framework: só quem está logado acessa a API
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
+    "DEFAULT_AUTHENTICATION_CLASSES": ["rest_framework.authentication.SessionAuthentication"],
+}
