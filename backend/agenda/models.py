@@ -11,7 +11,7 @@ LIMITE_ENCAIXES = 5    # encaixes por dia
 LIMITE_CIRURGIAS = 6   # cirurgias por dia
 HORARIO_INICIO = time(8, 0)
 HORARIO_FIM = time(18, 0)
-INTERVALO_CONSULTA = 20  # minutos entre um horário de consulta e o próximo
+INTERVALO_CONSULTA = 10  # minutos entre um horário de consulta e o próximo
 INTERVALO_CIRURGIA = 60  # cirurgias só em horas cheias
 
 
