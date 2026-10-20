@@ -2,11 +2,13 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
+from agenda.views import AgendamentoViewSet
 from pacientes.views import PacienteViewSet
 
 # O router cria sozinho os endereços de cada ViewSet
 router = DefaultRouter()
 router.register("pacientes", PacienteViewSet)
+router.register("agendamentos", AgendamentoViewSet, basename="agendamento")
 
 urlpatterns = [
     path("admin/", admin.site.urls),

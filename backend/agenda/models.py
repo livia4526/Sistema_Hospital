@@ -5,12 +5,14 @@ from django.db import models
 
 from pacientes.models import Paciente
 
-# ===== Regras do consultório (mudou a regra? muda só aqui) =====
+# ===== Regras do consultório =====
 LIMITE_CONSULTAS = 20  # consultas normais por dia
 LIMITE_ENCAIXES = 5    # encaixes por dia
 LIMITE_CIRURGIAS = 6   # cirurgias por dia
 HORARIO_INICIO = time(8, 0)
 HORARIO_FIM = time(18, 0)
+INTERVALO_CONSULTA = 20  # minutos entre um horário de consulta e o próximo
+INTERVALO_CIRURGIA = 60  # cirurgias só em horas cheias
 
 
 class Agendamento(models.Model):

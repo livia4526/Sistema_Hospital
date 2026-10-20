@@ -122,3 +122,59 @@ class ConsultaECirurgiaTest(TestCase):
         self.assertEqual(c.tipo, "cirurgia")
         self.assertEqual(Cirurgia.objects.count(), 1)
         self.assertEqual(Consulta.objects.count(), 0)
+
+
+class AgendamentoAPITest(TestCase):
+    """A API usa as mesmas regras do modelo."""
+
+    def setUp(self):
+        from django.contrib.auth.models import User
+        from rest_framework.test import APIClient
+
+        self.client = APIClient()
+        self.client.force_login(User.objects.create_user("secretaria", password="senha-teste-123"))
+        self.paciente = Paciente.objects.create(
+            nome="Paciente Teste", data_nascimento=date(1980, 5, 10),
+            celular="79999999999", cpf="12345678901",
+        )
+        self.consulta = {
+            "paciente": self.paciente.pk, "tipo": "consulta",
+            "data": "2030-03-04", "horario": "09:00", "motivo": "Rotina",
+        }
+
+    def test_marcar_consulta(self):
+        resposta = self.client.post("/api/agendamentos/", self.consulta)
+        self.assertEqual(resposta.status_code, 201)
+        self.assertEqual(resposta.data["horario"], "09:00")
+        self.assertEqual(resposta.data["paciente_nome"], "Paciente Teste")
+
+    def test_status_sempre_comeca_agendada(self):
+        resposta = self.client.post("/api/agendamentos/", {**self.consulta, "status": "realizada"})
+        self.assertEqual(resposta.data["status"], "agendada")
+
+    def test_horario_repetido_pela_api(self):
+        self.client.post("/api/agendamentos/", self.consulta)
+        resposta = self.client.post("/api/agendamentos/", self.consulta)
+        self.assertEqual(resposta.status_code, 400)
+
+    def test_marcar_falta_depois(self):
+        criado = self.client.post("/api/agendamentos/", self.consulta).data
+        resposta = self.client.patch(f"/api/agendamentos/{criado['id']}/", {"status": "falta"})
+        self.assertEqual(resposta.status_code, 200)
+        self.assertEqual(resposta.data["status_nome"], "Faltou")
+
+    def test_filtrar_por_data(self):
+        self.client.post("/api/agendamentos/", self.consulta)
+        self.assertEqual(len(self.client.get("/api/agendamentos/?data=2030-03-04").data), 1)
+        self.assertEqual(len(self.client.get("/api/agendamentos/?data=2030-03-05").data), 0)
+
+    def test_horarios_livres(self):
+        self.client.post("/api/agendamentos/", self.consulta)
+        livres = self.client.get("/api/agendamentos/horarios-livres/?data=2030-03-04").data["horarios"]
+        self.assertNotIn("09:00", livres)
+        self.assertIn("08:00", livres)
+        self.assertIn("18:00", livres)
+        cirurgia = self.client.get(
+            "/api/agendamentos/horarios-livres/?data=2030-03-05&tipo=cirurgia"
+        ).data["horarios"]
+        self.assertEqual(cirurgia[:3], ["08:00", "09:00", "10:00"])
