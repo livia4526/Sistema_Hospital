@@ -15,7 +15,7 @@
 
 ## 💡 Sobre
 
-Projeto de estudo que nasceu de um problema real: ajudar a minha mãe, que é secretária em um hospital de olhos, a organizar o dia a dia da recepção. Ela precisa cadastrar pacientes, marcar consultas e cirurgias, controlar quem compareceu e não estourar o limite de atendimentos do dia — tudo isso, hoje, com muita coisa feita à mão.
+Projeto de estudo que nasceu de um problema real: ajudar a minha mãe, que é secretária em um consultório de oftamologia, a organizar o dia a dia da recepção. Ela precisa cadastrar pacientes, marcar consultas e cirurgias, controlar quem compareceu e não estourar o limite de atendimentos do dia — tudo isso, hoje, com muita coisa feita à mão.
 
 > ⚠️ Projeto acadêmico e pessoal, **sem vínculo oficial** com nenhum hospital. Nenhum dado real de paciente é usado.
 
