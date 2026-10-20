@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "pacientes",
     "agenda",
     "dashboard",
+    "contas",
 ]
 
 MIDDLEWARE = [
@@ -148,6 +149,8 @@ MAILERS = {
 # Permite que o front-end em React (Vite) converse com a API
 CORS_ALLOWED_ORIGINS = ["http://localhost:5173"]
 
+# Endereço do React que pode enviar formulários (login, cadastros) para o Django
+CSRF_TRUSTED_ORIGINS = ["http://localhost:5173"]
 
 # Django REST Framework: só quem está logado acessa a API
 REST_FRAMEWORK = {

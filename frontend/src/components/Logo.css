@@ -1,0 +1,12 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo-nome {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 1.15rem;
+  color: var(--texto-suave);
+}
