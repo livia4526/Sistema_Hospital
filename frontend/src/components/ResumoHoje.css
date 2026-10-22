@@ -1,0 +1,38 @@
+.resumo h2 {
+  font-size: 1.05rem;
+  margin-bottom: 16px;
+}
+
+.resumo-numeros {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  text-align: center;
+}
+
+.resumo-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.resumo-rotulo,
+.resumo-detalhe {
+  font-size: 0.75rem;
+  color: var(--texto-suave);
+}
+
+.resumo-valor {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.9rem;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+@media (max-width: 420px) {
+  .resumo-numeros {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 16px;
+  }
+}

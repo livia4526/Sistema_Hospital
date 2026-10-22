@@ -30,3 +30,11 @@ export type Agendamento = {
   precaucoes: string
   observacao: string
 }
+
+export type ResumoDoDia = {
+  data: string
+  total: number
+  compareceram: number
+  faltaram: number
+  pendentes: number
+}

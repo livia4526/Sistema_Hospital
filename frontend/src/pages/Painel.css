@@ -2,8 +2,29 @@
   min-height: 100vh;
 }
 
+/* Duas colunas no computador, como no Figma */
 .painel {
-  max-width: 760px;
+  max-width: 1180px;
   margin: 0 auto;
   padding: 32px 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.painel-coluna {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Telas menores: uma coluna só, com a agenda primeiro */
+@media (max-width: 900px) {
+  .painel {
+    grid-template-columns: 1fr;
+  }
+  .painel-agenda {
+    order: -1;
+  }
 }

@@ -51,3 +51,21 @@ class AgendamentoViewSet(viewsets.ModelViewSet):
                 livres.append(atual.strftime("%H:%M"))
             atual += passo
         return Response({"data": texto_data, "tipo": tipo, "horarios": livres})
+
+    @action(detail=False)
+    def resumo(self, request):
+        """/api/agendamentos/resumo/?data=2026-10-20  ->  números do bloco "Hoje" do painel"""
+        texto_data = request.query_params.get("data") or date.today().isoformat()
+        try:
+            dia = date.fromisoformat(texto_data)
+        except ValueError:
+            return Response({"erro": "Data inválida. Use o formato 2026-10-20."}, status=400)
+
+        do_dia = Agendamento.objects.filter(data=dia, status__in=Agendamento.STATUS_ATIVOS)
+        return Response({
+            "data": texto_data,
+            "total": do_dia.count(),
+            "compareceram": do_dia.filter(status=Agendamento.Status.REALIZADA).count(),
+            "faltaram": do_dia.filter(status=Agendamento.Status.FALTA).count(),
+            "pendentes": do_dia.filter(status=Agendamento.Status.AGENDADA).count(),
+        })

@@ -8,7 +8,8 @@ import './AgendaDoDia.css'
 
 type Dia = 'hoje' | 'amanha'
 
-export function AgendaDoDia() {
+// aoMudar: avisa o painel quando uma presença é marcada (para o resumo se atualizar)
+export function AgendaDoDia({ aoMudar }: { aoMudar?: () => void }) {
   const [dia, setDia] = useState<Dia>('hoje')
   const [agendamentos, setAgendamentos] = useState<Agendamento[]>([])
   const [carregando, setCarregando] = useState(true)
@@ -52,6 +53,7 @@ export function AgendaDoDia() {
     setErro('')
     try {
       substituir(await atualizar<Agendamento>(`/agendamentos/${agendamento.id}/`, { status }))
+      aoMudar?.()
     } catch (e) {
       setErro(e instanceof Error ? e.message : 'Não foi possível marcar a presença.')
     }

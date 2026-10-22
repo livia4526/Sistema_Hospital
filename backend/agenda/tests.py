@@ -178,3 +178,14 @@ class AgendamentoAPITest(TestCase):
             "/api/agendamentos/horarios-livres/?data=2030-03-05&tipo=cirurgia"
         ).data["horarios"]
         self.assertEqual(cirurgia[:3], ["08:00", "09:00", "10:00"])
+
+    def test_resumo_do_dia(self):
+        a = self.client.post("/api/agendamentos/", self.consulta).data
+        self.client.post("/api/agendamentos/", {**self.consulta, "horario": "10:00"})
+        self.client.post("/api/agendamentos/", {**self.consulta, "horario": "11:00"})
+        self.client.patch(f"/api/agendamentos/{a['id']}/", {"status": "realizada"})
+        resumo = self.client.get("/api/agendamentos/resumo/?data=2030-03-04").data
+        self.assertEqual(
+            (resumo["total"], resumo["compareceram"], resumo["faltaram"], resumo["pendentes"]),
+            (3, 1, 0, 2),
+        )
