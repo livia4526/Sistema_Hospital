@@ -1,0 +1,16 @@
+.cabecalho {
+  background: var(--cartao);
+  border-bottom: 1px solid var(--borda);
+  padding: 10px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cabecalho-usuario {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 0.85rem;
+  color: var(--texto-suave);
+}

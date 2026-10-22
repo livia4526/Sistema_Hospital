@@ -42,6 +42,26 @@ h3 {
 }
 
 button,
-input {
+input,
+select,
+textarea {
   font: inherit;
+}
+
+/* Caixas de mensagem (erro e aviso), usadas em várias telas */
+.mensagem {
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: var(--raio-campo);
+  font-size: 0.85rem;
+}
+
+.mensagem-erro {
+  background: var(--erro-fundo);
+  color: var(--erro);
+}
+
+.mensagem-aviso {
+  background: var(--fundo);
+  color: var(--texto-suave);
 }

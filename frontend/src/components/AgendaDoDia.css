@@ -1,0 +1,202 @@
+.cartao {
+  background: var(--cartao);
+  border-radius: var(--raio);
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(20, 28, 45, 0.06);
+}
+
+.agenda {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.agenda-topo h2 {
+  font-size: 1.15rem;
+}
+
+.agenda-topo p {
+  margin: 4px 0 0 14px;
+  font-size: 0.8rem;
+  color: var(--texto-suave);
+}
+
+/* Rolagem interna: a tabela rola, o cartão não cresce sem fim */
+.agenda-tabela-area {
+  max-height: 440px;
+  overflow: auto;
+}
+
+.agenda-tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.agenda-tabela th {
+  position: sticky; /* o cabeçalho fica parado enquanto a lista rola */
+  top: 0;
+  background: var(--cartao);
+  text-align: left;
+  font-weight: 400;
+  color: var(--texto-suave);
+  padding: 6px 8px;
+}
+
+.agenda-tabela td {
+  padding: 7px 8px;
+}
+
+.centro {
+  text-align: center !important;
+}
+
+/* Cores de cada situação, como no Figma */
+.linha-realizada .riscavel {
+  color: #3aa889;
+  text-decoration: line-through;
+}
+
+.linha-falta .riscavel {
+  color: #e07070;
+  text-decoration: line-through;
+}
+
+.linha-encaixe .riscavel:first-child {
+  color: var(--azul);
+  font-weight: 500;
+}
+
+.selo-encaixe {
+  margin-left: 6px;
+  font-size: 0.7rem;
+  background: var(--azul);
+  color: #fff;
+  border-radius: 999px;
+  padding: 1px 7px;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.presenca {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.botao-presenca {
+  font-size: 0.75rem;
+  border-radius: 6px;
+  padding: 3px 9px;
+  cursor: pointer;
+  border: 1px solid;
+}
+
+.botao-presenca.sim {
+  background: #d9f4ea;
+  border-color: #5cc29f;
+  color: #217a5d;
+}
+
+.botao-presenca.nao {
+  background: #fde0e0;
+  border-color: #e88;
+  color: #b23b3b;
+}
+
+/* Depois de clicar, o botão fica cinza (presença registrada) */
+.botao-presenca.marcado {
+  background: #dedfe3;
+  border-color: #b9bcc4;
+  color: #4a4f5a;
+}
+
+.botao-obs {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--texto);
+  padding: 4px;
+  border-radius: 6px;
+  position: relative;
+}
+
+.botao-obs:hover {
+  background: var(--fundo);
+}
+
+/* Bolinha azul quando já existe observação */
+.botao-obs.tem-obs::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  right: 1px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--azul);
+}
+
+.agenda-vazia {
+  text-align: center;
+  color: var(--texto-suave);
+  font-size: 0.85rem;
+  padding: 24px 0;
+  margin: 0;
+}
+
+.agenda-rodape {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--borda);
+  padding-top: 14px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.seletor-dia {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--texto-suave);
+}
+
+.seletor-dia select {
+  border: none;
+  background: var(--fundo);
+  border-radius: 6px;
+  padding: 5px 8px;
+  font-size: 0.8rem;
+  color: var(--texto);
+}
+
+.botao-encaixe {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--azul);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 7px 18px;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.botao-encaixe:hover {
+  background: var(--azul-escuro);
+}
+
+@media (max-width: 560px) {
+  .cartao {
+    padding: 18px 12px;
+  }
+  .agenda-tabela {
+    font-size: 0.78rem;
+  }
+  /* No celular, a coluna "Tipo" some para caber o resto */
+  .col-tipo {
+    display: none;
+  }
+}

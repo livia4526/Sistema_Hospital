@@ -38,3 +38,6 @@ export async function api<T>(caminho: string, opcoes: RequestInit = {}): Promise
 
 export const enviar = (caminho: string, corpo: unknown) =>
   api(caminho, { method: 'POST', body: JSON.stringify(corpo) })
+
+export const atualizar = <T,>(caminho: string, corpo: unknown) =>
+  api<T>(caminho, { method: 'PATCH', body: JSON.stringify(corpo) })
