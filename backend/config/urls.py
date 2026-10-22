@@ -13,6 +13,7 @@ router.register("agendamentos", AgendamentoViewSet, basename="agendamento")
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/auth/", include("contas.urls")),
+    path("api/painel/", include("dashboard.urls")),
     path("api/", include(router.urls)),
     path("api-auth/", include("rest_framework.urls")),  # login da página da API
 ]

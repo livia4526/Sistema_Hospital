@@ -14,6 +14,12 @@
   --texto-suave: #5f6673;
   --erro: #c62828;
   --erro-fundo: #fdecec;
+  --meta-boa: #3aa889;
+  --meta-boa-texto: #217a5d;
+  --meta-perto: #e8b931;
+  --meta-perto-texto: #8a6a00;
+  --meta-longe: #e07070;
+  --meta-longe-texto: #b23b3b;
   --raio: 16px;
   --raio-campo: 10px;
   --tamanho-texto: 16px; /* o ajuste de tamanho de letra vai mexer aqui */

@@ -38,3 +38,17 @@ export type ResumoDoDia = {
   faltaram: number
   pendentes: number
 }
+
+export type Cumprimento = {
+  realizadas: number
+  meta: number
+  cumprimento: number // em %, pode passar de 100
+}
+
+export type MetasDoMes = {
+  ano: number
+  mes: number
+  consultas: Cumprimento
+  cirurgias: Cumprimento
+  geral: Cumprimento
+}

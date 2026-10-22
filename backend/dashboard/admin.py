@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import MetaMensal
+
+
+@admin.register(MetaMensal)
+class MetaMensalAdmin(admin.ModelAdmin):
+    list_display = ["__str__", "meta_consultas", "meta_cirurgias"]

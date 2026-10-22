@@ -1,0 +1,79 @@
+.metas {
+  margin-top: 28px;
+}
+
+.metas h2 {
+  font-size: 1.05rem;
+  margin-bottom: 16px;
+}
+
+.metas-itens {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  text-align: center;
+}
+
+.metas-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.metas-valor {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.metas-barra {
+  width: 80%;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--fundo);
+  overflow: hidden;
+}
+
+.metas-barra div {
+  height: 100%;
+  border-radius: 999px;
+}
+
+/* Cores por desempenho */
+.metas-item.bom .metas-barra div {
+  background: var(--meta-boa);
+}
+.metas-item.perto .metas-barra div {
+  background: var(--meta-perto);
+}
+.metas-item.longe .metas-barra div {
+  background: var(--meta-longe);
+}
+
+.metas-detalhe {
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+.metas-item.bom .metas-detalhe {
+  color: var(--meta-boa-texto);
+}
+.metas-item.perto .metas-detalhe {
+  color: var(--meta-perto-texto);
+}
+.metas-item.longe .metas-detalhe {
+  color: var(--meta-longe-texto);
+}
+
+.metas-rotulo {
+  margin-top: 2px;
+  font-size: 0.75rem;
+  color: var(--texto-suave);
+}
+
+@media (max-width: 420px) {
+  .metas-itens {
+    grid-template-columns: 1fr;
+  }
+}

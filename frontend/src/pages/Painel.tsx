@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { AgendaDoDia } from '../components/AgendaDoDia'
 import { Cabecalho } from '../components/Cabecalho'
+import { Metas } from '../components/Metas'
 import { ResumoHoje } from '../components/ResumoHoje'
 import './Painel.css'
 
@@ -14,7 +15,10 @@ export function Painel() {
       <Cabecalho />
       <main className="painel">
         <div className="painel-coluna">
-          <ResumoHoje versao={versao} />
+          <section className="cartao">
+            <ResumoHoje versao={versao} />
+            <Metas versao={versao} />
+          </section>
         </div>
         <div className="painel-coluna painel-agenda">
           <AgendaDoDia aoMudar={() => setVersao((v) => v + 1)} />

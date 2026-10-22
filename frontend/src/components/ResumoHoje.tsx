@@ -26,7 +26,7 @@ export function ResumoHoje({ versao }: { versao: number }) {
   ]
 
   return (
-    <section className="cartao resumo">
+    <section className="resumo">
       <h2>Hoje:</h2>
       {erro ? (
         <p className="mensagem mensagem-erro">Não foi possível carregar o resumo.</p>
