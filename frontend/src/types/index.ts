@@ -24,6 +24,7 @@ export type Agendamento = {
   status: StatusAgendamento
   status_nome: string
   encaixe: boolean
+  confirmado: boolean
   motivo: string
   olho: string
   tipo_cirurgia: string
@@ -51,4 +52,9 @@ export type MetasDoMes = {
   consultas: Cumprimento
   cirurgias: Cumprimento
   geral: Cumprimento
+}
+
+export type Alerta = {
+  tipo: 'cancelamento' | 'confirmacao' | 'aniversario'
+  mensagem: string
 }

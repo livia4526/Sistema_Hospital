@@ -5,7 +5,7 @@ from django.db import models
 
 from pacientes.models import Paciente
 
-# ===== Regras do consultório =====
+# ===== Regras do consultório (mudou a regra? muda só aqui) =====
 LIMITE_CONSULTAS = 20  # consultas normais por dia
 LIMITE_ENCAIXES = 5    # encaixes por dia
 LIMITE_CIRURGIAS = 6   # cirurgias por dia
@@ -56,6 +56,10 @@ class Agendamento(models.Model):
         "status", max_length=10, choices=Status.choices, default=Status.AGENDADA
     )
     encaixe = models.BooleanField("encaixe", default=False)
+    confirmado = models.BooleanField(
+        "confirmado pelo paciente", default=False,
+        help_text="O paciente confirmou que vem (por telefone, WhatsApp...).",
+    )
     observacao = models.TextField("observação", blank=True)
 
     # ----- Só para consulta -----

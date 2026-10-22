@@ -54,8 +54,27 @@ class Command(BaseCommand):
             pacientes.append(paciente)
 
         hoje = date.today()
+
+        # Um aniversariante no dia em que o comando roda, para aparecer nos alertas
+        aniversariante, _ = Paciente.objects.get_or_create(
+            cpf="90000000009",
+            defaults={"nome": "Fernanda Oliveira", "sexo": "F", "celular": "79991110009", "plano": "unimed",
+                      "data_nascimento": date(1983, 1, 1)},
+        )
+        ano = 1984 if (hoje.month, hoje.day) == (2, 29) else 1983  # 1984 teve 29 de fevereiro
+        aniversariante.data_nascimento = date(ano, hoje.month, hoje.day)
+        aniversariante.sexo = "F"
+        aniversariante.save()
+
         criados = self.marcar(hoje, AGENDA_HOJE, pacientes)
         criados += self.marcar(hoje + timedelta(days=1), AGENDA_AMANHA, pacientes)
+
+        # Um cancelamento amanhã, para aparecer nos alertas
+        _, cancelamento_novo = Agendamento.objects.get_or_create(
+            paciente=pacientes[5], data=hoje + timedelta(days=1), horario=time(11, 0),
+            defaults={"tipo": "consulta", "status": "cancelada", "motivo": "Rotina"},
+        )
+        criados += int(cancelamento_novo)
         self.stdout.write(self.style.SUCCESS(
             f"Pronto: {len(pacientes)} pacientes de exemplo e {criados} consultas novas."
         ))

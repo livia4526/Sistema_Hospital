@@ -14,7 +14,7 @@ class AgendamentoSerializer(serializers.ModelSerializer):
         model = Agendamento
         fields = [
             "id", "paciente", "paciente_nome", "tipo", "tipo_nome", "data", "horario",
-            "status", "status_nome", "encaixe", "motivo",
+            "status", "status_nome", "encaixe", "confirmado", "motivo",
             "olho", "tipo_cirurgia", "precaucoes", "observacao",
             "remarcado_de", "criado_em",
         ]

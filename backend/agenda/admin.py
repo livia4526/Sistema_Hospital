@@ -32,7 +32,7 @@ class BaseAgendaAdmin(admin.ModelAdmin):
         # Editando um agendamento que já existe: o status aparece.
         if obj is None:
             return self.campos_ao_marcar
-        return self.campos_ao_marcar + ["status"]
+        return self.campos_ao_marcar + ["confirmado", "status"]
 
     def formfield_for_dbfield(self, db_field, request, **kwargs):
         if db_field.name == "horario":

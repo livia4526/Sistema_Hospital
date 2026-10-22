@@ -1,0 +1,57 @@
+.alertas h2 {
+  font-size: 1.05rem;
+  margin-bottom: 14px;
+}
+
+.alertas-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+/* Cada alerta é uma "pílula" cinza, como no Figma */
+.alerta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #e4e6ea;
+  border-radius: 999px;
+  padding: 5px 14px 5px 6px;
+  font-size: 0.8rem;
+}
+
+.alerta-icone {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.alerta-cancelamento .alerta-icone {
+  background: var(--meta-longe);
+}
+
+.alerta-confirmacao .alerta-icone {
+  background: var(--meta-perto);
+  color: #3d2f00;
+}
+
+.alerta-aniversario .alerta-icone {
+  background: var(--azul-claro);
+}
+
+.alertas-vazio {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--texto-suave);
+}

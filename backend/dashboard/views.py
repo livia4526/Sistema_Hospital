@@ -1,9 +1,10 @@
-from datetime import date
+from datetime import date, timedelta
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from agenda.models import Agendamento
+from pacientes.models import Paciente
 
 from .models import MetaMensal
 
@@ -50,3 +51,54 @@ def metas_do_mes(request):
             "cumprimento": cumprimento(total_realizado, total_meta),
         },
     })
+
+
+def plural(quantidade, singular, plural_):
+    return singular if quantidade == 1 else plural_
+
+
+def mensagem_de_aniversario(paciente):
+    """Usa "a paciente" ou "o paciente" conforme o sexo cadastrado; sem sexo, uma frase neutra."""
+    if paciente.sexo == Paciente.Sexo.FEMININO:
+        return f"É o aniversário da paciente {paciente.nome} hoje!"
+    if paciente.sexo == Paciente.Sexo.MASCULINO:
+        return f"É o aniversário do paciente {paciente.nome} hoje!"
+    return f"Hoje é aniversário de {paciente.nome}!"
+
+
+@api_view(["GET"])
+def alertas(request):
+    """/api/painel/alertas/  ->  avisos do dia para a secretária"""
+    hoje = date.today()
+    amanha = hoje + timedelta(days=1)
+    lista = []
+
+    # 1) Cancelamentos de amanhã
+    cancelados = Agendamento.objects.filter(data=amanha, status=Agendamento.Status.CANCELADA).count()
+    if cancelados:
+        lista.append({
+            "tipo": "cancelamento",
+            "mensagem": f"{cancelados} {plural(cancelados, 'paciente cancelou', 'pacientes cancelaram')} "
+                        "a consulta de amanhã.",
+        })
+
+    # 2) Cirurgias de amanhã que o paciente ainda não confirmou
+    sem_confirmacao = Agendamento.objects.filter(
+        data=amanha, tipo=Agendamento.Tipo.CIRURGIA,
+        status=Agendamento.Status.AGENDADA, confirmado=False,
+    ).count()
+    if sem_confirmacao:
+        lista.append({
+            "tipo": "confirmacao",
+            "mensagem": f"{sem_confirmacao} {plural(sem_confirmacao, 'cirurgia agendada', 'cirurgias agendadas')} "
+                        "para amanhã sem confirmação!",
+        })
+
+    # 3) Aniversariantes do dia
+    aniversariantes = Paciente.objects.filter(
+        data_nascimento__month=hoje.month, data_nascimento__day=hoje.day
+    ).order_by("nome")
+    for paciente in aniversariantes:
+        lista.append({"tipo": "aniversario", "mensagem": mensagem_de_aniversario(paciente)})
+
+    return Response(lista)

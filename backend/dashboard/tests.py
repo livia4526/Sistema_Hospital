@@ -1,4 +1,4 @@
-from datetime import date, time
+from datetime import date, time, timedelta
 
 from django.contrib.auth.models import User
 from rest_framework.test import APITestCase
@@ -56,3 +56,43 @@ class MetasTest(APITestCase):
         from .views import cumprimento
         self.assertEqual(cumprimento(220, 200), 110.0)
         self.assertEqual(cumprimento(199, 200), 99.5)
+
+
+class AlertasTest(APITestCase):
+    def setUp(self):
+        self.client.force_login(User.objects.create_user("secretaria", password="senha-teste-123"))
+        self.hoje = date.today()
+        self.amanha = self.hoje + timedelta(days=1)
+        self.paciente = Paciente.objects.create(
+            nome="João Silva", data_nascimento=self.hoje.replace(year=1980),
+            celular="79999999999", cpf="12345678901",
+        )
+
+    def mensagens(self):
+        return [a["mensagem"] for a in self.client.get("/api/painel/alertas/").data]
+
+    def test_aniversariante_sem_sexo_usa_frase_neutra(self):
+        self.assertIn("Hoje é aniversário de João Silva!", self.mensagens())
+
+    def test_aniversariante_masculino_e_feminino(self):
+        self.paciente.sexo = "M"
+        self.paciente.save()
+        Paciente.objects.create(
+            nome="Maria Souza", sexo="F", data_nascimento=self.hoje.replace(year=1990),
+            celular="79988888888", cpf="10987654321",
+        )
+        mensagens = self.mensagens()
+        self.assertIn("É o aniversário do paciente João Silva hoje!", mensagens)
+        self.assertIn("É o aniversário da paciente Maria Souza hoje!", mensagens)
+
+    def test_cancelamentos_de_amanha(self):
+        Agendamento.objects.create(paciente=self.paciente, tipo="consulta", data=self.amanha,
+                                   horario=time(8, 0), status="cancelada")
+        self.assertIn("1 paciente cancelou a consulta de amanhã.", self.mensagens())
+
+    def test_cirurgias_sem_confirmacao(self):
+        for hora, confirmado in [(8, False), (9, False), (10, True)]:
+            Agendamento.objects.create(paciente=self.paciente, tipo="cirurgia", data=self.amanha,
+                                       horario=time(hora, 0), olho="OD", tipo_cirurgia="catarata",
+                                       confirmado=confirmado)
+        self.assertIn("2 cirurgias agendadas para amanhã sem confirmação!", self.mensagens())
