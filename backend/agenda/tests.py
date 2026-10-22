@@ -189,3 +189,23 @@ class AgendamentoAPITest(TestCase):
             (resumo["total"], resumo["compareceram"], resumo["faltaram"], resumo["pendentes"]),
             (3, 1, 0, 2),
         )
+
+    def test_calendario_semanal(self):
+        from datetime import timedelta
+        hoje = date.today()
+        segunda = hoje - timedelta(days=hoje.weekday())
+        quarta = segunda + timedelta(days=2)
+        for i in range(13):  # 13 de 25 vagas = 52% -> moderado
+            Agendamento.objects.create(paciente=self.paciente, tipo="consulta", data=quarta,
+                                       horario=time(8 + i // 3, (i % 3) * 20))
+        for hora in range(8, 14):  # 6 de 6 cirurgias = 100% -> cheio
+            Agendamento.objects.create(paciente=self.paciente, tipo="cirurgia", data=segunda,
+                                       horario=time(hora, 0), olho="OD", tipo_cirurgia="catarata")
+        dias = self.client.get("/api/agendamentos/semana/").data["dias"]
+        self.assertEqual(len(dias), 6)
+        self.assertEqual(dias[0]["nome"], "Segunda")
+        self.assertEqual((dias[0]["tipo"], dias[0]["ocupacao"], dias[0]["nivel"]), ("cirurgia", 100, "cheio"))
+        self.assertEqual((dias[2]["quantidade"], dias[2]["ocupacao"], dias[2]["nivel"]), (13, 52, "moderado"))
+        self.assertEqual((dias[1]["tipo"], dias[1]["nivel"]), (None, "tranquilo"))
+        proxima = self.client.get("/api/agendamentos/semana/?semana=1").data
+        self.assertEqual(proxima["inicio"], (segunda + timedelta(weeks=1)).isoformat())

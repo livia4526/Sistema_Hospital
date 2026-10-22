@@ -5,8 +5,21 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .models import (
-    HORARIO_FIM, HORARIO_INICIO, INTERVALO_CIRURGIA, INTERVALO_CONSULTA, Agendamento,
+    HORARIO_FIM, HORARIO_INICIO, INTERVALO_CIRURGIA, INTERVALO_CONSULTA,
+    LIMITE_CIRURGIAS, LIMITE_CONSULTAS, LIMITE_ENCAIXES, Agendamento,
 )
+
+NOMES_DOS_DIAS = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"]
+DIAS_DE_ATENDIMENTO = 6  # de segunda a sábado
+
+
+def nivel_de_ocupacao(porcentagem):
+    """Regra do PDF: até 50% tranquilo, de 51% a 80% moderado, 81% ou mais cheio."""
+    if porcentagem <= 50:
+        return "tranquilo"
+    if porcentagem <= 80:
+        return "moderado"
+    return "cheio"
 from .serializers import AgendamentoSerializer
 
 
@@ -69,3 +82,38 @@ class AgendamentoViewSet(viewsets.ModelViewSet):
             "faltaram": do_dia.filter(status=Agendamento.Status.FALTA).count(),
             "pendentes": do_dia.filter(status=Agendamento.Status.AGENDADA).count(),
         })
+
+    @action(detail=False)
+    def semana(self, request):
+        """/api/agendamentos/semana/?semana=0  ->  ocupação de cada dia (0 = esta semana, 1 = a próxima...)"""
+        try:
+            deslocamento = int(request.query_params.get("semana", 0))
+        except ValueError:
+            return Response({"erro": "O parâmetro semana deve ser um número."}, status=400)
+
+        hoje = date.today()
+        segunda = hoje - timedelta(days=hoje.weekday()) + timedelta(weeks=deslocamento)
+        dias = []
+        for i in range(DIAS_DE_ATENDIMENTO):
+            dia = segunda + timedelta(days=i)
+            ativos = Agendamento.objects.filter(data=dia, status__in=Agendamento.STATUS_ATIVOS)
+            consultas = ativos.filter(tipo=Agendamento.Tipo.CONSULTA).count()
+            cirurgias = ativos.filter(tipo=Agendamento.Tipo.CIRURGIA).count()
+
+            # Um dia é só de consultas ou só de cirurgias, então a capacidade depende do tipo
+            if cirurgias:
+                tipo, ocupados, capacidade = "cirurgia", cirurgias, LIMITE_CIRURGIAS
+            else:
+                tipo, ocupados, capacidade = "consulta", consultas, LIMITE_CONSULTAS + LIMITE_ENCAIXES
+            porcentagem = round(ocupados / capacidade * 100)
+
+            dias.append({
+                "data": dia.isoformat(),
+                "nome": NOMES_DOS_DIAS[dia.weekday()],
+                "tipo": tipo if ocupados else None,
+                "quantidade": ocupados,
+                "ocupacao": porcentagem,
+                "nivel": nivel_de_ocupacao(porcentagem),
+                "eh_hoje": dia == hoje,
+            })
+        return Response({"inicio": segunda.isoformat(), "dias": dias})

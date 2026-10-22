@@ -14,6 +14,7 @@
 }
 
 .painel-coluna {
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -27,4 +28,10 @@
   .painel-agenda {
     order: -1;
   }
+}
+
+/* O calendário ocupa as duas colunas */
+.painel-largura-toda {
+  grid-column: 1 / -1;
+  min-width: 0; /* deixa a rolagem lateral dos dias funcionar dentro do grid */
 }

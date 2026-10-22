@@ -40,9 +40,18 @@ AGENDA_AMANHA = [
     (time(10, 0), 0, "Rotina", False),
 ]
 
+# Depois de amanhã é dia de cirurgias: (horário, índice do paciente, olho, tipo)
+CIRURGIAS = [
+    (time(8, 0), 0, "OD", "catarata"),
+    (time(9, 0), 5, "OE", "catarata"),
+    (time(10, 0), 1, "AO", "miopia"),
+    (time(11, 0), 3, "OD", "glaucoma"),
+    (time(13, 0), 7, "OE", "retina"),
+]
+
 
 class Command(BaseCommand):
-    help = "Cria pacientes e consultas de exemplo para hoje e amanhã."
+    help = "Cria pacientes, consultas (hoje e amanhã) e cirurgias (depois de amanhã) de exemplo."
 
     def handle(self, *args, **opcoes):
         pacientes = []
@@ -69,6 +78,8 @@ class Command(BaseCommand):
         criados = self.marcar(hoje, AGENDA_HOJE, pacientes)
         criados += self.marcar(hoje + timedelta(days=1), AGENDA_AMANHA, pacientes)
 
+        criados += self.marcar_cirurgias(hoje + timedelta(days=2), pacientes)
+
         # Um cancelamento amanhã, para aparecer nos alertas
         _, cancelamento_novo = Agendamento.objects.get_or_create(
             paciente=pacientes[5], data=hoje + timedelta(days=1), horario=time(11, 0),
@@ -76,8 +87,23 @@ class Command(BaseCommand):
         )
         criados += int(cancelamento_novo)
         self.stdout.write(self.style.SUCCESS(
-            f"Pronto: {len(pacientes)} pacientes de exemplo e {criados} consultas novas."
+            f"Pronto: {len(pacientes)} pacientes de exemplo e {criados} agendamentos novos."
         ))
+
+    def marcar_cirurgias(self, dia, pacientes):
+        criados = 0
+        for horario, indice, olho, tipo_cirurgia in CIRURGIAS:
+            cirurgia = Agendamento(
+                paciente=pacientes[indice], tipo="cirurgia", data=dia, horario=horario,
+                olho=olho, tipo_cirurgia=tipo_cirurgia, precaucoes="Jejum de 8 horas",
+            )
+            try:
+                cirurgia.full_clean()
+            except ValidationError:
+                continue
+            cirurgia.save()
+            criados += 1
+        return criados
 
     def marcar(self, dia, agenda, pacientes):
         criados = 0

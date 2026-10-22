@@ -23,3 +23,15 @@ export function somarDias(data: Date, dias: number): Date {
 export function porExtenso(data: Date): string {
   return `${data.getDate()} de ${MESES[data.getMonth()]} de ${data.getFullYear()}`
 }
+
+// "2026-10-22" -> Date (no horário do computador, sem pular de dia por causa do fuso)
+export function deTextoISO(texto: string): Date {
+  const [ano, mes, dia] = texto.split('-').map(Number)
+  return new Date(ano, mes - 1, dia)
+}
+
+// "2026-10-22" -> "22/10"
+export function diaEMes(texto: string): string {
+  const [, mes, dia] = texto.split('-')
+  return `${dia}/${mes}`
+}

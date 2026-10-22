@@ -58,3 +58,20 @@ export type Alerta = {
   tipo: 'cancelamento' | 'confirmacao' | 'aniversario'
   mensagem: string
 }
+
+export type NivelDeOcupacao = 'tranquilo' | 'moderado' | 'cheio'
+
+export type DiaDaSemana = {
+  data: string
+  nome: string
+  tipo: 'consulta' | 'cirurgia' | null
+  quantidade: number
+  ocupacao: number // em %
+  nivel: NivelDeOcupacao
+  eh_hoje: boolean
+}
+
+export type Semana = {
+  inicio: string
+  dias: DiaDaSemana[]
+}

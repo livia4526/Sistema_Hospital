@@ -1,25 +1,29 @@
 import { useEffect, useState } from 'react'
 import { api, atualizar } from '../api/cliente'
 import type { Agendamento, StatusAgendamento } from '../types'
-import { paraTextoISO, porExtenso, somarDias } from '../utils/datas'
+import { deTextoISO, diaEMes, paraTextoISO, porExtenso, somarDias } from '../utils/datas'
 import { IconeLapis } from './IconeLapis'
 import { ModalObservacao } from './ModalObservacao'
 import './AgendaDoDia.css'
 
-type Dia = 'hoje' | 'amanha'
+type Props = {
+  dataISO: string // o dia mostrado, ex.: "2026-10-22" (quem escolhe é o painel)
+  aoTrocarData: (dataISO: string) => void
+  aoMudar?: () => void // avisa o painel quando uma presença é marcada
+}
 
-// aoMudar: avisa o painel quando uma presença é marcada (para o resumo se atualizar)
-export function AgendaDoDia({ aoMudar }: { aoMudar?: () => void }) {
-  const [dia, setDia] = useState<Dia>('hoje')
+export function AgendaDoDia({ dataISO, aoTrocarData, aoMudar }: Props) {
   const [agendamentos, setAgendamentos] = useState<Agendamento[]>([])
   const [carregando, setCarregando] = useState(true)
   const [erro, setErro] = useState('')
   const [aviso, setAviso] = useState('')
   const [editandoObs, setEditandoObs] = useState<Agendamento | null>(null)
 
-  const data = dia === 'hoje' ? new Date() : somarDias(new Date(), 1)
-  const dataISO = paraTextoISO(data)
-  const ehHoje = dia === 'hoje'
+  const hojeISO = paraTextoISO(new Date())
+  const amanhaISO = paraTextoISO(somarDias(new Date(), 1))
+  const data = deTextoISO(dataISO)
+  const ehHoje = dataISO === hojeISO // só a agenda de hoje permite marcar presença
+  const outroDia = dataISO !== hojeISO && dataISO !== amanhaISO
 
   // Busca a agenda sempre que o dia escolhido muda
   useEffect(() => {
@@ -35,8 +39,8 @@ export function AgendaDoDia({ aoMudar }: { aoMudar?: () => void }) {
     }
   }, [dataISO])
 
-  function trocarDia(novo: Dia) {
-    setDia(novo)
+  function trocarDia(novo: string) {
+    aoTrocarData(novo)
     setCarregando(true)
     setErro('')
     setAviso('')
@@ -132,7 +136,9 @@ export function AgendaDoDia({ aoMudar }: { aoMudar?: () => void }) {
 
         {carregando && <p className="agenda-vazia">Carregando...</p>}
         {!carregando && agendamentos.length === 0 && !erro && (
-          <p className="agenda-vazia">Nenhum paciente agendado para {ehHoje ? 'hoje' : 'amanhã'}.</p>
+          <p className="agenda-vazia">
+            Nenhum paciente agendado para {ehHoje ? 'hoje' : dataISO === amanhaISO ? 'amanhã' : 'este dia'}.
+          </p>
         )}
       </div>
 
@@ -142,9 +148,11 @@ export function AgendaDoDia({ aoMudar }: { aoMudar?: () => void }) {
       <footer className="agenda-rodape">
         <label className="seletor-dia">
           Dia:
-          <select value={dia} onChange={(e) => trocarDia(e.target.value as Dia)}>
-            <option value="hoje">Hoje</option>
-            <option value="amanha">Amanhã</option>
+          <select value={dataISO} onChange={(e) => trocarDia(e.target.value)}>
+            <option value={hojeISO}>Hoje</option>
+            <option value={amanhaISO}>Amanhã</option>
+            {/* dia escolhido no calendário semanal */}
+            {outroDia && <option value={dataISO}>{diaEMes(dataISO)}</option>}
           </select>
         </label>
         <button

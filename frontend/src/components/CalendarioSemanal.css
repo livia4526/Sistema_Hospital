@@ -1,0 +1,135 @@
+.calendario {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.calendario-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.calendario-topo h2 {
+  font-size: 1.05rem;
+}
+
+.calendario-dias {
+  display: flex;
+  overflow-x: auto;
+  padding-bottom: 8px; /* espaço para a barra de rolagem */
+  scroll-snap-type: x mandatory;
+}
+
+.calendario-dia {
+  flex: 1 0 172px; /* divide o espaço; se não couber, rola */
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  text-align: left;
+  background: none;
+  border: none;
+  border-left: 1px solid var(--borda);
+  padding: 4px 18px 14px;
+  cursor: pointer;
+  color: var(--texto);
+}
+
+.calendario-dia:first-child {
+  border-left: none;
+}
+
+.calendario-dia:hover {
+  background: var(--fundo);
+}
+
+.calendario-dia.selecionado {
+  background: #e9eef9;
+  border-radius: 10px;
+}
+
+.calendario-dia-topo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  border-bottom: 1px solid var(--borda);
+  padding-bottom: 8px;
+}
+
+.calendario-dia-topo strong {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.calendario-data {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-size: 0.75rem;
+  color: var(--texto-suave);
+}
+
+.selo-hoje {
+  font-size: 0.65rem;
+  background: var(--azul);
+  color: #fff;
+  border-radius: 999px;
+  padding: 1px 7px;
+}
+
+/* Cores de ocupação: verde tranquilo, amarelo moderado, vermelho cheio */
+.selo-nivel {
+  font-size: 0.7rem;
+  border-radius: 999px;
+  padding: 3px 14px;
+}
+
+.selo-nivel.tranquilo {
+  background: #bfeee0;
+  color: #1d6b53;
+}
+
+.selo-nivel.moderado {
+  background: #fdf1a8;
+  color: #6b5600;
+}
+
+.selo-nivel.cheio {
+  background: #fcc5c5;
+  color: #9b2c2c;
+}
+
+.calendario-ocupacao {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.bolinha {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.bolinha.tranquilo {
+  background: #8fdcc4;
+}
+
+.bolinha.moderado {
+  background: #f5e06a;
+}
+
+.bolinha.cheio {
+  background: #f59b9b;
+}
+
+.calendario-descricao {
+  font-size: 0.78rem;
+}
