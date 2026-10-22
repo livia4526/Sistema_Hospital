@@ -3,6 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { ProvedorDeLogin } from './auth/ProvedorDeLogin'
 import { useLogin } from './auth/useLogin'
 import { Login } from './pages/Login'
+import { NovoPaciente } from './pages/NovoPaciente'
 import { Painel } from './pages/Painel'
 
 // Só deixa ver a página quem está logado; os outros vão para o login
@@ -19,6 +20,7 @@ export default function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<Protegida><Painel /></Protegida>} />
+          <Route path="/pacientes/novo" element={<Protegida><NovoPaciente /></Protegida>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>

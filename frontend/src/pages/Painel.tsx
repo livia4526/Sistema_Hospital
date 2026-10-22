@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react'
+import { AcoesRapidas } from '../components/AcoesRapidas'
 import { AgendaDoDia } from '../components/AgendaDoDia'
 import { Alertas } from '../components/Alertas'
 import { Cabecalho } from '../components/Cabecalho'
@@ -43,6 +44,9 @@ export function Painel() {
         </div>
         <div className="painel-largura-toda">
           <CalendarioSemanal diaSelecionado={diaDaAgenda} aoEscolherDia={verDiaNoCalendario} />
+        </div>
+        <div className="painel-largura-toda">
+          <AcoesRapidas />
         </div>
       </main>
     </div>

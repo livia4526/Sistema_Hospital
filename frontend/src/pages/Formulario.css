@@ -1,0 +1,154 @@
+/* Estilo comum das telas de cadastro (paciente, consulta, cirurgia).
+   Cada tela escolhe sua cor com uma classe "tema-...". */
+
+.pagina-formulario {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+}
+
+.voltar {
+  display: inline-block;
+  margin-bottom: 16px;
+  color: var(--azul-escuro);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.voltar:hover {
+  text-decoration: underline;
+}
+
+.cartao-formulario {
+  border-radius: 24px;
+  padding: 36px 32px 28px;
+  background: var(--tema-fundo);
+  color: var(--tema-texto);
+}
+
+.cartao-formulario h1 {
+  font-size: 1.6rem;
+  margin-bottom: 24px;
+  color: var(--tema-titulo);
+}
+
+/* Temas de cor de cada tela, como no Figma */
+.tema-paciente {
+  --tema-fundo: var(--verde-agua);
+  --tema-texto: #1f5c4b;
+  --tema-titulo: #1f5c4b;
+  --tema-botao: #2e6b5e;
+}
+
+.grade {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px 20px;
+}
+
+.largura-toda {
+  grid-column: 1 / -1;
+}
+
+.largura-3 {
+  grid-column: span 3;
+}
+
+.campo-form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.9rem;
+}
+
+.campo-form input,
+.campo-form select,
+.campo-form textarea {
+  border: none;
+  border-radius: 10px;
+  background: #f2f4f8;
+  padding: 11px 12px;
+  font-size: 0.88rem;
+  color: var(--texto);
+  width: 100%;
+}
+
+.campo-form textarea {
+  resize: vertical;
+}
+
+.campo-form input:focus,
+.campo-form select:focus,
+.campo-form textarea:focus {
+  outline: 2px solid var(--tema-botao);
+  outline-offset: 1px;
+}
+
+.erro-campo {
+  font-size: 0.78rem;
+  color: var(--erro);
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 6px;
+  padding: 2px 6px;
+  align-self: flex-start;
+}
+
+.rodape-formulario {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+
+.botao-formulario {
+  background: var(--tema-botao);
+  color: #fff;
+  border: 2px solid var(--tema-botao);
+  border-radius: 999px;
+  padding: 10px 28px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.botao-formulario.contorno {
+  background: none;
+  color: var(--tema-botao);
+}
+
+.botao-formulario:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.cartao-formulario .mensagem {
+  margin-top: 16px;
+}
+
+.sucesso p {
+  margin: 0 0 24px;
+}
+
+.botoes-sucesso {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 760px) {
+  .grade {
+    grid-template-columns: 1fr 1fr;
+  }
+  .largura-3 {
+    grid-column: 1 / -1;
+  }
+  .cartao-formulario {
+    padding: 28px 18px 22px;
+  }
+}
+
+@media (max-width: 420px) {
+  .grade {
+    grid-template-columns: 1fr;
+  }
+}

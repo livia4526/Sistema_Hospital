@@ -1,0 +1,45 @@
+.acoes-rapidas {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.acoes-botoes {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.acao {
+  border: none;
+  border-radius: 999px;
+  padding: 12px 30px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 2px 6px rgba(20, 28, 45, 0.12);
+}
+
+.acao:hover {
+  filter: brightness(0.95);
+}
+
+.acao-consulta {
+  background: var(--azul);
+  color: #fff;
+}
+
+.acao-cirurgia {
+  background: var(--azul-claro);
+  color: #fff;
+}
+
+.acao-paciente {
+  background: var(--verde-agua);
+  color: #1f5c4b;
+}

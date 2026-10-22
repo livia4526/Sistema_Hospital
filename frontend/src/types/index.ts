@@ -75,3 +75,29 @@ export type Semana = {
   inicio: string
   dias: DiaDaSemana[]
 }
+
+export type Paciente = {
+  id: number
+  nome: string
+  cpf: string
+  data_nascimento: string
+  idade: number
+  sexo: '' | 'F' | 'M' | 'O'
+  plano: string
+  plano_nome: string
+  plano_outro: string
+  celular: string
+  email: string
+  informacoes_complementares: string
+}
+
+// Os mesmos valores do modelo Paciente no Django
+export const PLANOS = [
+  { valor: 'unimed', nome: 'Unimed' },
+  { valor: 'hapvida', nome: 'Hapvida' },
+  { valor: 'bradesco', nome: 'Bradesco' },
+  { valor: 'plamed', nome: 'Plamed' },
+  { valor: 'notredame', nome: 'NotreDame' },
+  { valor: 'particular', nome: 'Particular' },
+  { valor: 'outros', nome: 'Outros' },
+]

@@ -43,7 +43,10 @@ class Paciente(models.Model):
     )
     celular = models.CharField("celular", max_length=11, validators=[celular_validator])
     email = models.EmailField("e-mail", blank=True)
-    cpf = models.CharField("CPF", max_length=11, unique=True, validators=[cpf_validator])
+    cpf = models.CharField(
+        "CPF", max_length=11, unique=True, validators=[cpf_validator],
+        error_messages={"unique": "Já existe um paciente cadastrado com este CPF."},
+    )
     informacoes_complementares = models.TextField(
         "informações complementares", blank=True,
         help_text="Ex.: Diabético, Hipertenso, Alérgico",
