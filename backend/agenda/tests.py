@@ -209,3 +209,23 @@ class AgendamentoAPITest(TestCase):
         self.assertEqual((dias[1]["tipo"], dias[1]["nivel"]), (None, "tranquilo"))
         proxima = self.client.get("/api/agendamentos/semana/?semana=1").data
         self.assertEqual(proxima["inicio"], (segunda + timedelta(weeks=1)).isoformat())
+
+    def test_horarios_livres_avisa_dia_bloqueado(self):
+        self.client.post("/api/agendamentos/", self.consulta)
+        resposta = self.client.get("/api/agendamentos/horarios-livres/?data=2030-03-04&tipo=cirurgia").data
+        self.assertEqual(resposta["horarios"], [])
+        self.assertIn("mesmo dia", resposta["aviso"])
+
+    def test_nao_agenda_no_passado(self):
+        resposta = self.client.post("/api/agendamentos/", {**self.consulta, "data": "2020-01-06"})
+        self.assertEqual(resposta.status_code, 400)
+        self.assertIn("data", resposta.data)
+        livres = self.client.get("/api/agendamentos/horarios-livres/?data=2020-01-06").data
+        self.assertEqual(livres["horarios"], [])
+
+    def test_hoje_nao_mostra_horarios_que_ja_passaram(self):
+        from django.utils import timezone
+        hoje = date.today().isoformat()
+        livres = self.client.get(f"/api/agendamentos/horarios-livres/?data={hoje}").data["horarios"]
+        agora = timezone.localtime().strftime("%H:%M")
+        self.assertTrue(all(h > agora for h in livres))

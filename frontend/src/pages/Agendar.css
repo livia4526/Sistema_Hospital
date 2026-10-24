@@ -1,0 +1,43 @@
+/* Passo "O paciente possui cadastro?" (Figma) */
+.pergunta {
+  max-width: 330px;
+  margin: 60px auto;
+  padding: 36px 28px;
+  text-align: center;
+  border-radius: 28px;
+}
+
+.pergunta p {
+  margin: 0 0 28px;
+  font-size: 1.05rem;
+}
+
+.pergunta-botoes {
+  display: flex;
+  gap: 12px;
+}
+
+.pergunta-botoes button {
+  flex: 1;
+  border-radius: 999px;
+  padding: 9px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1.5px solid var(--azul);
+}
+
+.pergunta-sim {
+  background: var(--azul);
+  color: #fff;
+}
+
+.pergunta-nao {
+  background: var(--cartao);
+  color: var(--azul);
+}
+
+.titulo-passo {
+  text-align: center;
+  font-size: 1.2rem;
+  margin: 8px 0 20px;
+}

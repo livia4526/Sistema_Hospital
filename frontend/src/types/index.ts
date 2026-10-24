@@ -101,3 +101,26 @@ export const PLANOS = [
   { valor: 'particular', nome: 'Particular' },
   { valor: 'outros', nome: 'Outros' },
 ]
+
+export type HorariosLivres = {
+  data: string
+  tipo: string
+  horarios: string[]
+  aviso: string | null // motivo de não haver horários (dia de cirurgia, limite atingido...)
+}
+
+export const OLHOS = [
+  { valor: 'OD', nome: 'OD - Olho direito' },
+  { valor: 'OE', nome: 'OE - Olho esquerdo' },
+  { valor: 'AO', nome: 'AO - Ambos os olhos' },
+]
+
+export const TIPOS_DE_CIRURGIA = [
+  { valor: 'catarata', nome: 'Catarata' },
+  { valor: 'miopia', nome: 'Miopia' },
+  { valor: 'glaucoma', nome: 'Glaucoma' },
+  { valor: 'retina', nome: 'Retina' },
+  { valor: 'estrabismo', nome: 'Estrabismo' },
+  { valor: 'cornea', nome: 'Córnea' },
+  { valor: 'outros', nome: 'Outros' },
+]

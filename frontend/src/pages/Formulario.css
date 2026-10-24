@@ -40,6 +40,20 @@
   --tema-botao: #2e6b5e;
 }
 
+.tema-consulta {
+  --tema-fundo: var(--azul);
+  --tema-texto: #ffffff;
+  --tema-titulo: #ffffff;
+  --tema-botao: var(--azul-claro);
+}
+
+.tema-cirurgia {
+  --tema-fundo: var(--azul-claro);
+  --tema-texto: #ffffff;
+  --tema-titulo: #ffffff;
+  --tema-botao: var(--azul);
+}
+
 .grade {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -77,6 +91,18 @@
   resize: vertical;
 }
 
+/* Campos só de leitura (dados que vêm do cadastro do paciente) */
+.campo-form input[readonly] {
+  background: rgba(242, 244, 248, 0.75);
+  color: var(--texto-suave);
+}
+
+.campo-form input:disabled,
+.campo-form select:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+}
+
 .campo-form input:focus,
 .campo-form select:focus,
 .campo-form textarea:focus {
@@ -99,6 +125,21 @@
   margin-top: 24px;
 }
 
+.rodape-formulario.entre {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.link-trocar {
+  background: none;
+  border: none;
+  color: var(--tema-texto);
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 0;
+}
+
 .botao-formulario {
   background: var(--tema-botao);
   color: #fff;
@@ -113,7 +154,8 @@
 
 .botao-formulario.contorno {
   background: none;
-  color: var(--tema-botao);
+  color: var(--tema-texto);
+  border-color: currentColor;
 }
 
 .botao-formulario:disabled {
@@ -136,7 +178,21 @@
 }
 
 @media (max-width: 760px) {
-  .grade {
+  .tema-consulta {
+  --tema-fundo: var(--azul);
+  --tema-texto: #ffffff;
+  --tema-titulo: #ffffff;
+  --tema-botao: var(--azul-claro);
+}
+
+.tema-cirurgia {
+  --tema-fundo: var(--azul-claro);
+  --tema-texto: #ffffff;
+  --tema-titulo: #ffffff;
+  --tema-botao: var(--azul);
+}
+
+.grade {
     grid-template-columns: 1fr 1fr;
   }
   .largura-3 {
@@ -148,7 +204,21 @@
 }
 
 @media (max-width: 420px) {
-  .grade {
+  .tema-consulta {
+  --tema-fundo: var(--azul);
+  --tema-texto: #ffffff;
+  --tema-titulo: #ffffff;
+  --tema-botao: var(--azul-claro);
+}
+
+.tema-cirurgia {
+  --tema-fundo: var(--azul-claro);
+  --tema-texto: #ffffff;
+  --tema-titulo: #ffffff;
+  --tema-botao: var(--azul);
+}
+
+.grade {
     grid-template-columns: 1fr;
   }
 }

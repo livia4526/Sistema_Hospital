@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { api, atualizar } from '../api/cliente'
 import type { Agendamento, StatusAgendamento } from '../types'
 import { deTextoISO, diaEMes, paraTextoISO, porExtenso, somarDias } from '../utils/datas'
@@ -16,7 +17,6 @@ export function AgendaDoDia({ dataISO, aoTrocarData, aoMudar }: Props) {
   const [agendamentos, setAgendamentos] = useState<Agendamento[]>([])
   const [carregando, setCarregando] = useState(true)
   const [erro, setErro] = useState('')
-  const [aviso, setAviso] = useState('')
   const [editandoObs, setEditandoObs] = useState<Agendamento | null>(null)
 
   const hojeISO = paraTextoISO(new Date())
@@ -43,7 +43,6 @@ export function AgendaDoDia({ dataISO, aoTrocarData, aoMudar }: Props) {
     aoTrocarData(novo)
     setCarregando(true)
     setErro('')
-    setAviso('')
   }
 
   // Troca um agendamento da lista pela versão nova que o Django devolveu
@@ -143,7 +142,6 @@ export function AgendaDoDia({ dataISO, aoTrocarData, aoMudar }: Props) {
       </div>
 
       {erro && <p className="mensagem mensagem-erro">{erro}</p>}
-      {aviso && <p className="mensagem mensagem-aviso">{aviso}</p>}
 
       <footer className="agenda-rodape">
         <label className="seletor-dia">
@@ -155,13 +153,9 @@ export function AgendaDoDia({ dataISO, aoTrocarData, aoMudar }: Props) {
             {outroDia && <option value={dataISO}>{diaEMes(dataISO)}</option>}
           </select>
         </label>
-        <button
-          type="button"
-          className="botao-encaixe"
-          onClick={() => setAviso('A tela de encaixe vem junto com a tela de Nova consulta.')}
-        >
+        <Link to="/agendar/consulta?encaixe=1" className="botao-encaixe">
           <IconeLapis /> Adicionar encaixe
-        </button>
+        </Link>
       </footer>
 
       {editandoObs && (

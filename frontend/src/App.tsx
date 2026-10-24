@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { ProvedorDeLogin } from './auth/ProvedorDeLogin'
 import { useLogin } from './auth/useLogin'
+import { Agendar } from './pages/Agendar'
 import { Login } from './pages/Login'
 import { NovoPaciente } from './pages/NovoPaciente'
 import { Painel } from './pages/Painel'
@@ -21,6 +22,7 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<Protegida><Painel /></Protegida>} />
           <Route path="/pacientes/novo" element={<Protegida><NovoPaciente /></Protegida>} />
+          <Route path="/agendar/:tipo" element={<Protegida><Agendar /></Protegida>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>

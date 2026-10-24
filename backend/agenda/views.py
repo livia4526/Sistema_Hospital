@@ -1,5 +1,6 @@
 from datetime import date, datetime, timedelta
 
+from django.utils import timezone
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -40,7 +41,7 @@ class AgendamentoViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, url_path="horarios-livres")
     def horarios_livres(self, request):
-        """/api/agendamentos/horarios-livres/?data=2026-10-20&tipo=consulta"""
+        """/api/agendamentos/horarios-livres/?data=2026-10-20&tipo=consulta&encaixe=1"""
         texto_data = request.query_params.get("data")
         tipo = request.query_params.get("tipo", "consulta")
         if not texto_data:
@@ -50,6 +51,14 @@ class AgendamentoViewSet(viewsets.ModelViewSet):
         except ValueError:
             return Response({"erro": "Data inválida. Use o formato 2026-10-20."}, status=400)
 
+        encaixe = request.query_params.get("encaixe") in ("1", "true")
+        if dia < date.today():
+            return Response({"data": texto_data, "tipo": tipo, "horarios": [],
+                             "aviso": "Esta data já passou."})
+        problema = Agendamento.problema_no_dia(dia, tipo, encaixe)
+        if problema:
+            return Response({"data": texto_data, "tipo": tipo, "horarios": [], "aviso": problema})
+
         ocupados = set(
             Agendamento.objects.filter(data=dia, status__in=Agendamento.STATUS_ATIVOS)
             .values_list("horario", flat=True)
@@ -58,12 +67,16 @@ class AgendamentoViewSet(viewsets.ModelViewSet):
         atual = datetime.combine(dia, HORARIO_INICIO)
         fim = datetime.combine(dia, HORARIO_FIM)
 
+        # Hoje, os horários que já passaram não aparecem
+        agora = timezone.localtime().time() if dia == date.today() else None
+
         livres = []
         while atual <= fim:
-            if atual.time() not in ocupados:
+            horario = atual.time()
+            if horario not in ocupados and (agora is None or horario > agora):
                 livres.append(atual.strftime("%H:%M"))
             atual += passo
-        return Response({"data": texto_data, "tipo": tipo, "horarios": livres})
+        return Response({"data": texto_data, "tipo": tipo, "horarios": livres, "aviso": None})
 
     @action(detail=False)
     def resumo(self, request):

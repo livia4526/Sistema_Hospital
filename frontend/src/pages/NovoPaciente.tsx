@@ -1,9 +1,10 @@
 import { useState, type FormEvent } from 'react'
-import { Link } from 'react-router-dom'
-import { ErroDaApi, enviar } from '../api/cliente'
+import { Link, useSearchParams } from 'react-router-dom'
+import { enviar } from '../api/cliente'
 import { Cabecalho } from '../components/Cabecalho'
 import { PLANOS, type Paciente } from '../types'
 import { paraTextoISO } from '../utils/datas'
+import { errosDoDjango } from '../utils/erros'
 import { mascaraCPF, mascaraCelular, soNumeros } from '../utils/mascaras'
 import './Formulario.css'
 
@@ -34,19 +35,12 @@ function validar(campos: Campos): Erros {
   return erros
 }
 
-// O Django devolve os erros assim: { "cpf": ["Paciente com este CPF já existe."] }
-function errosDoDjango(dados: unknown): Erros {
-  if (!dados || typeof dados !== 'object') return { geral: 'Não foi possível cadastrar.' }
-  const erros: Erros = {}
-  for (const [campo, mensagens] of Object.entries(dados)) {
-    const texto = Array.isArray(mensagens) ? mensagens.join(' ') : String(mensagens)
-    const chave = (campo in VAZIO ? campo : 'geral') as keyof Erros
-    erros[chave] = texto
-  }
-  return erros
-}
-
 export function NovoPaciente() {
+  // Quando vem do agendamento ("O paciente possui cadastro? Não"), o endereço traz ?voltar=/agendar/consulta
+  const [parametros] = useSearchParams()
+  const pedido = parametros.get('voltar') ?? ''
+  const voltar = pedido.startsWith('/agendar/') ? pedido : null // só aceita voltar para telas de agendamento
+
   const [campos, setCampos] = useState<Campos>(VAZIO)
   const [erros, setErros] = useState<Erros>({})
   const [enviando, setEnviando] = useState(false)
@@ -75,7 +69,7 @@ export function NovoPaciente() {
       setCadastrado(paciente)
       setCampos(VAZIO)
     } catch (e) {
-      setErros(e instanceof ErroDaApi ? errosDoDjango(e.dados) : { geral: 'Não foi possível cadastrar.' })
+      setErros(errosDoDjango(e, Object.keys(VAZIO)) as Erros)
     } finally {
       setEnviando(false)
     }
@@ -96,7 +90,19 @@ export function NovoPaciente() {
             <h1>Paciente cadastrado!</h1>
             <p>O cadastro de {cadastrado.nome} foi concluído.</p>
             <div className="botoes-sucesso">
-              <button type="button" className="botao-formulario" onClick={() => setCadastrado(null)}>
+              {voltar && (
+                <Link
+                  to={`${voltar}${voltar.includes('?') ? '&' : '?'}paciente=${cadastrado.id}`}
+                  className="botao-formulario"
+                >
+                  Continuar o agendamento
+                </Link>
+              )}
+              <button
+                type="button"
+                className={`botao-formulario${voltar ? ' contorno' : ''}`}
+                onClick={() => setCadastrado(null)}
+              >
                 Cadastrar outro paciente
               </button>
               <Link to="/" className="botao-formulario contorno">Voltar ao painel</Link>

@@ -1,4 +1,4 @@
-from datetime import time
+from datetime import date, time
 
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -106,6 +106,10 @@ class Agendamento(models.Model):
     def clean(self):
         erros = {}
 
+        # 0) Não dá para marcar um agendamento novo num dia que já passou
+        if self.pk is None and self.data and self.data < date.today():
+            erros["data"] = "Não é possível agendar em uma data que já passou."
+
         # 1) Horário de funcionamento
         if self.horario and not (HORARIO_INICIO <= self.horario <= HORARIO_FIM):
             erros["horario"] = "O horário deve ser entre 08:00 e 18:00."
@@ -138,27 +142,40 @@ class Agendamento(models.Model):
         if self.horario and outros.filter(horario=self.horario).exists():
             raise ValidationError({"horario": "Já existe um agendamento neste dia e horário."})
 
-        # 4) Nunca consulta e cirurgia no mesmo dia
-        outro_tipo = self.Tipo.CIRURGIA if self.tipo == self.Tipo.CONSULTA else self.Tipo.CONSULTA
+        # 4) e 5) Mesmo dia com consulta e cirurgia, e limites diários
+        problema = Agendamento.problema_no_dia(self.data, self.tipo, self.encaixe, excluir=self.pk)
+        if problema:
+            raise ValidationError(problema)
+
+    @staticmethod
+    def problema_no_dia(dia, tipo, encaixe=False, excluir=None):
+        """Diz por que não dá para marcar mais um agendamento deste tipo no dia (ou None se dá).
+        Usado na validação e na lista de horários livres."""
+        outros = Agendamento.objects.filter(data=dia, status__in=Agendamento.STATUS_ATIVOS)
+        if excluir:
+            outros = outros.exclude(pk=excluir)
+
+        # Nunca consulta e cirurgia no mesmo dia
+        outro_tipo = Agendamento.Tipo.CIRURGIA if tipo == Agendamento.Tipo.CONSULTA else Agendamento.Tipo.CONSULTA
         if outros.filter(tipo=outro_tipo).exists():
-            raise ValidationError(
+            return (
                 f"Este dia já tem {outro_tipo}s marcadas. "
                 "Consulta e cirurgia não podem ficar no mesmo dia."
             )
 
-        # 5) Limites diários
-        if self.tipo == self.Tipo.CIRURGIA:
-            if outros.filter(tipo=self.Tipo.CIRURGIA).count() >= LIMITE_CIRURGIAS:
-                raise ValidationError(f"Limite de {LIMITE_CIRURGIAS} cirurgias neste dia atingido.")
-        elif self.encaixe:
-            if outros.filter(tipo=self.Tipo.CONSULTA, encaixe=True).count() >= LIMITE_ENCAIXES:
-                raise ValidationError(f"Limite de {LIMITE_ENCAIXES} encaixes neste dia atingido.")
-        else:
-            if outros.filter(tipo=self.Tipo.CONSULTA, encaixe=False).count() >= LIMITE_CONSULTAS:
-                raise ValidationError(
-                    f"Limite de {LIMITE_CONSULTAS} consultas neste dia atingido. "
-                    "Ainda é possível marcar como encaixe."
-                )
+        # Limites diários
+        if tipo == Agendamento.Tipo.CIRURGIA:
+            if outros.filter(tipo=tipo).count() >= LIMITE_CIRURGIAS:
+                return f"Limite de {LIMITE_CIRURGIAS} cirurgias neste dia atingido."
+        elif encaixe:
+            if outros.filter(tipo=tipo, encaixe=True).count() >= LIMITE_ENCAIXES:
+                return f"Limite de {LIMITE_ENCAIXES} encaixes neste dia atingido."
+        elif outros.filter(tipo=tipo, encaixe=False).count() >= LIMITE_CONSULTAS:
+            return (
+                f"Limite de {LIMITE_CONSULTAS} consultas neste dia atingido. "
+                "Ainda é possível marcar como encaixe."
+            )
+        return None
 
 
 # ===== Consulta e Cirurgia: "visões" separadas da mesma tabela =====

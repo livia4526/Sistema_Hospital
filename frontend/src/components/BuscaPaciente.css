@@ -1,0 +1,84 @@
+.busca {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.busca-caixa {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--cartao);
+  border-radius: 12px;
+  padding: 10px 16px;
+  color: var(--texto-suave);
+  max-width: 520px;
+  width: 100%;
+  margin: 0 auto;
+  box-shadow: 0 1px 3px rgba(20, 28, 45, 0.08);
+}
+
+.busca-caixa input {
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: 0.95rem;
+  background: none;
+  color: var(--texto);
+}
+
+.busca-vazia {
+  text-align: center;
+  color: var(--texto-suave);
+  margin: 8px 0;
+}
+
+.busca-resultados {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Cartão de cada paciente encontrado (como no Figma) */
+.cartao-paciente {
+  width: 100%;
+  text-align: left;
+  background: var(--cartao);
+  border: 2px solid transparent;
+  border-radius: 20px;
+  padding: 18px 22px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: var(--texto);
+  box-shadow: 0 1px 3px rgba(20, 28, 45, 0.06);
+}
+
+.cartao-paciente:hover,
+.cartao-paciente:focus-visible {
+  border-color: var(--azul-claro);
+}
+
+.cartao-paciente strong {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 1.25rem;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  background: #e4e6ea;
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 0.75rem;
+  color: var(--texto-suave);
+}
