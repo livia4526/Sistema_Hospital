@@ -234,10 +234,6 @@ A versão original continua guardada na branch [`v1-flask`](../../tree/v1-flask)
 - [x] Painel: agenda do dia, resumo, metas, alertas e calendário semanal
 - [x] Encaixe, remarcação e cancelamento
 - [x] Modo escuro e tamanho da letra
-- [ ] Lembretes reais por WhatsApp e e-mail (5 dias antes, 1 dia antes e no dia)
-- [ ] "Esqueceu a senha?" e login com Google
-- [ ] Relatórios em PDF/CSV
-- [ ] Publicar uma versão de demonstração online
 
 ---
 
