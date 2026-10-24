@@ -201,3 +201,8 @@
     display: none;
   }
 }
+
+/* No modo escuro, o azul do encaixe fica mais claro para dar leitura */
+[data-tema='escuro'] .linha-encaixe .riscavel:first-child {
+  color: var(--azul-claro);
+}
