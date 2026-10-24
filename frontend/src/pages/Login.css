@@ -118,7 +118,7 @@
   background: none;
   border: none;
   padding: 0;
-  color: var(--azul-escuro);
+  color: var(--link);
   cursor: pointer;
   font-size: inherit;
 }
@@ -159,8 +159,8 @@
 
 .botao-contorno {
   background: var(--cartao);
-  color: var(--azul-escuro);
-  border: 2px solid var(--azul-escuro);
+  color: var(--link);
+  border: 2px solid var(--link);
 }
 
 .cartao-login hr {
@@ -173,7 +173,7 @@
 .rodape-login {
   margin: 0;
   font-size: 0.8rem;
-  color: var(--azul-escuro);
+  color: var(--link);
 }
 
 @media (max-width: 480px) {

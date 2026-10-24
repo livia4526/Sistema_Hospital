@@ -1,0 +1,127 @@
+.configuracoes .voltar {
+  margin-bottom: 16px;
+}
+
+.config-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.config-estado {
+  font-size: 0.85rem;
+  color: var(--texto-suave);
+}
+
+.config-estado.salvo {
+  color: var(--meta-boa-texto);
+}
+
+.config-estado.erro {
+  color: var(--erro);
+}
+
+.config-titulo {
+  font-size: 1.05rem;
+  margin: 8px 0 14px;
+  color: var(--texto);
+}
+
+.opcoes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.opcao {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  text-align: left;
+  background: var(--campo);
+  border: 2px solid transparent;
+  border-radius: 14px;
+  padding: 14px;
+  cursor: pointer;
+  color: var(--texto);
+}
+
+.opcao:hover {
+  border-color: var(--borda);
+}
+
+.opcao.escolhida {
+  border-color: var(--azul-claro);
+  background: var(--selecionado);
+}
+
+.opcao small {
+  color: var(--texto-suave);
+  font-size: 0.78rem;
+}
+
+.opcao-letra {
+  align-items: center;
+  text-align: center;
+}
+
+.amostra-letra {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+/* Miniaturas dos temas: uma "tela" pequena com barra e dois cartões */
+.miniatura {
+  width: 100%;
+  height: 64px;
+  border-radius: 8px;
+  padding: 8px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 10px 1fr;
+  gap: 6px;
+  border: 1px solid var(--borda);
+}
+
+.miniatura span:first-child {
+  grid-column: 1 / -1;
+}
+
+.miniatura span {
+  border-radius: 4px;
+}
+
+.miniatura-claro {
+  background: #f2f4f8;
+}
+
+.miniatura-claro span {
+  background: #ffffff;
+}
+
+.miniatura-escuro {
+  background: #12161d;
+}
+
+.miniatura-escuro span {
+  background: #2a3240;
+}
+
+.miniatura-sistema {
+  background: linear-gradient(135deg, #f2f4f8 50%, #12161d 50%);
+}
+
+.miniatura-sistema span {
+  background: rgba(127, 140, 160, 0.45);
+}
+
+.config-dica {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--texto-suave);
+}

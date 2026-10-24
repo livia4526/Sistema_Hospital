@@ -1,9 +1,20 @@
 // Formatos dos dados que vêm da API do Django
 
+export type Tema = 'claro' | 'escuro' | 'sistema'
+export type TamanhoLetra = 'pequena' | 'normal' | 'grande' | 'muito_grande'
+
 export type Usuario = {
   id: number
   usuario: string
   nome: string
+  primeiro_nome: string
+  sobrenome: string
+  email: string
+  cargo: string
+  telefone: string
+  foto: string | null // endereço da foto, ex.: "/media/fotos/ana.png"
+  tema: Tema
+  tamanho_letra: TamanhoLetra
 }
 
 export type Sessao = {

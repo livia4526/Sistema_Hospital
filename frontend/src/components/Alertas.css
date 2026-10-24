@@ -18,7 +18,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: #e4e6ea;
+  background: var(--pilula);
   border-radius: 999px;
   padding: 5px 14px 5px 6px;
   font-size: 0.8rem;

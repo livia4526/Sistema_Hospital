@@ -1,10 +1,15 @@
 .cabecalho {
   background: var(--cartao);
   border-bottom: 1px solid var(--borda);
-  padding: 10px 24px;
+  padding: 8px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
+}
+
+.cabecalho-logo {
+  text-decoration: none;
 }
 
 .cabecalho-usuario {
@@ -13,4 +18,35 @@
   gap: 16px;
   font-size: 0.85rem;
   color: var(--texto-suave);
+}
+
+.icone-topo {
+  display: flex;
+  color: var(--texto);
+  padding: 6px;
+  border-radius: 8px;
+}
+
+.icone-topo:hover,
+.cabecalho-perfil:hover {
+  background: var(--fundo);
+}
+
+.cabecalho-perfil {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--texto);
+  text-decoration: none;
+  padding: 4px 8px 4px 4px;
+  border-radius: 999px;
+}
+
+@media (max-width: 520px) {
+  .cabecalho {
+    padding: 8px 12px;
+  }
+  .cabecalho-nome {
+    display: none; /* no celular, só a foto */
+  }
 }

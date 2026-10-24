@@ -48,7 +48,7 @@
 }
 
 .calendario-dia.selecionado {
-  background: #e9eef9;
+  background: var(--selecionado);
   border-radius: 10px;
 }
 

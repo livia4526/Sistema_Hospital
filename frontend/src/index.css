@@ -12,6 +12,10 @@
   --borda: #dde2ea;
   --texto: #1b1f27;
   --texto-suave: #5f6673;
+  --link: #1f3a6e;
+  --pilula: #e4e6ea; /* fundo das "pílulas" cinzas (alertas, chips) */
+  --selecionado: #e9eef9;
+  --campo-leitura: rgba(242, 244, 248, 0.75);
   --erro: #c62828;
   --erro-fundo: #fdecec;
   --meta-boa: #3aa889;
@@ -22,12 +26,30 @@
   --meta-longe-texto: #b23b3b;
   --raio: 16px;
   --raio-campo: 10px;
-  --tamanho-texto: 16px; /* o ajuste de tamanho de letra vai mexer aqui */
+  --tamanho-texto: 16px; /* muda com a configuração "Tamanho da letra" */
+  color-scheme: light;
 
   font-family: 'Roboto', system-ui, sans-serif;
-  font-size: var(--tamanho-texto);
+  font-size: var(--tamanho-texto); /* tudo que usa "rem" cresce ou diminui junto */
   color: var(--texto);
   background: var(--fundo);
+}
+
+/* ===== Modo escuro: as mesmas variáveis, com outras cores ===== */
+:root[data-tema='escuro'] {
+  --fundo: #12161d;
+  --cartao: #1c222c;
+  --campo: #262d39;
+  --borda: #313949;
+  --texto: #e8ebf0;
+  --texto-suave: #a3abb8;
+  --link: #9db8f0;
+  --pilula: #2c3442;
+  --selecionado: #263452;
+  --campo-leitura: #222833;
+  --erro: #ff8a80;
+  --erro-fundo: #3a1f22;
+  color-scheme: dark; /* calendários e barras de rolagem do navegador também ficam escuros */
 }
 
 * {

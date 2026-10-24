@@ -11,7 +11,7 @@
 /* Ficha: fundo branco e textos verdes, como no Figma */
 .tema-ficha {
   --tema-fundo: var(--cartao);
-  --tema-texto: #2e6b5e;
+  --tema-texto: var(--texto-ficha, #2e6b5e);
   --tema-titulo: var(--texto);
   --tema-botao: #2e6b5e;
 }
@@ -223,4 +223,9 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
+}
+
+[data-tema='escuro'] .tema-ficha {
+  --texto-ficha: #8fdcc4;
+  --tema-botao: #3aa889;
 }

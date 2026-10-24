@@ -1,12 +1,18 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import { api, enviar } from '../api/cliente'
 import type { Sessao, Usuario } from '../types'
+import { aplicarPreferencias } from '../utils/preferencias'
 import { ContextoLogin } from './contexto'
 
 // Guarda "quem está logado" e deixa essa informação disponível para o app inteiro
 export function ProvedorDeLogin({ children }: { children: ReactNode }) {
   const [usuario, setUsuario] = useState<Usuario | null>(null)
   const [carregando, setCarregando] = useState(true)
+
+  // Sempre que o usuário (ou as preferências dele) mudar, aplica tema e tamanho da letra
+  useEffect(() => {
+    if (usuario) aplicarPreferencias({ tema: usuario.tema, tamanho_letra: usuario.tamanho_letra })
+  }, [usuario])
 
   // Ao abrir o site, pergunta ao Django se já existe alguém logado
   useEffect(() => {
@@ -31,7 +37,7 @@ export function ProvedorDeLogin({ children }: { children: ReactNode }) {
   }
 
   return (
-    <ContextoLogin.Provider value={{ usuario, carregando, entrar, sair }}>
+    <ContextoLogin.Provider value={{ usuario, carregando, entrar, sair, atualizarUsuario: setUsuario }}>
       {children}
     </ContextoLogin.Provider>
   )

@@ -15,11 +15,13 @@ export class ErroDaApi extends Error {
 }
 
 export async function api<T>(caminho: string, opcoes: RequestInit = {}): Promise<T> {
+  const ehArquivo = opcoes.body instanceof FormData
   const resposta = await fetch('/api' + caminho, {
     ...opcoes,
     credentials: 'same-origin', // envia o cookie de sessão (quem está logado)
     headers: {
-      'Content-Type': 'application/json',
+      // Para arquivos (FormData), o próprio navegador define o tipo; para o resto, é JSON
+      ...(ehArquivo ? {} : { 'Content-Type': 'application/json' }),
       // O Django exige este "token anti-falsificação" em tudo que altera dados
       'X-CSRFToken': lerCookie('csrftoken'),
       ...opcoes.headers,
@@ -41,3 +43,12 @@ export const enviar = (caminho: string, corpo: unknown) =>
 
 export const atualizar = <T,>(caminho: string, corpo: unknown) =>
   api<T>(caminho, { method: 'PATCH', body: JSON.stringify(corpo) })
+
+export const apagar = <T,>(caminho: string) => api<T>(caminho, { method: 'DELETE' })
+
+// Envia um arquivo (ex.: foto) no campo indicado
+export function enviarArquivo<T>(caminho: string, campo: string, arquivo: File) {
+  const formulario = new FormData()
+  formulario.append(campo, arquivo)
+  return api<T>(caminho, { method: 'POST', body: formulario })
+}

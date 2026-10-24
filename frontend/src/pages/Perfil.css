@@ -1,0 +1,53 @@
+.perfil {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.perfil .voltar {
+  margin-bottom: -8px;
+}
+
+.perfil-topo {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.perfil-topo h1 {
+  margin: 0 0 4px;
+}
+
+.perfil-cargo {
+  margin: 0 0 12px;
+  color: var(--texto-suave);
+  font-size: 0.9rem;
+}
+
+.perfil-foto-botoes {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+
+.perfil-subtitulo {
+  font-size: 1.15rem;
+  margin: 0 0 20px;
+  color: var(--tema-titulo);
+}
+
+.largura-2 {
+  grid-column: span 2;
+}
+
+@media (max-width: 760px) {
+  .largura-2 {
+    grid-column: 1 / -1;
+  }
+  .esconder-celular {
+    display: none;
+  }
+}

@@ -10,6 +10,7 @@ export default defineConfig({
     // e o login (cookie de sessão) funciona sem complicação.
     proxy: {
       '/api': 'http://localhost:8000',
+      '/media': 'http://localhost:8000', // fotos enviadas (ex.: foto do perfil)
     },
   },
 })

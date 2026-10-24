@@ -1,0 +1,15 @@
+.avatar {
+  border-radius: 50%;
+  object-fit: cover; /* corta a foto para caber no círculo sem distorcer */
+  flex-shrink: 0;
+}
+
+.avatar-iniciais {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--azul-claro);
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+}
