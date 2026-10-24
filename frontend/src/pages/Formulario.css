@@ -55,6 +55,10 @@
 }
 
 .grade {
+  border: none; /* a grade é um <fieldset>: tira a borda e o espaço padrão dele */
+  margin: 0;
+  padding: 0;
+  min-width: 0;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 18px 20px;
@@ -98,7 +102,8 @@
 }
 
 .campo-form input:disabled,
-.campo-form select:disabled {
+.campo-form select:disabled,
+.campo-form textarea:disabled {
   opacity: 0.75;
   cursor: not-allowed;
 }

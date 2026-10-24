@@ -49,3 +49,21 @@ class PacienteAPITest(APITestCase):
         resposta = self.client.patch(f"/api/pacientes/{criado['id']}/", {"celular": "79911112222"})
         self.assertEqual(resposta.status_code, 200)
         self.assertEqual(Paciente.objects.get().celular, "79911112222")
+
+    def test_numeros_da_busca(self):
+        from datetime import date, time, timedelta
+
+        from agenda.models import Agendamento
+
+        paciente = Paciente.objects.create(**{**self.dados, "data_nascimento": date(1975, 3, 20)})
+        hoje = date.today()
+        Agendamento.objects.create(paciente=paciente, tipo="consulta", data=hoje - timedelta(days=30),
+                                   horario=time(8, 0), status="realizada")
+        Agendamento.objects.create(paciente=paciente, tipo="consulta", data=hoje - timedelta(days=10),
+                                   horario=time(8, 0), status="realizada")
+        Agendamento.objects.create(paciente=paciente, tipo="consulta", data=hoje + timedelta(days=5),
+                                   horario=time(8, 0))
+        dados = self.client.get(f"/api/pacientes/{paciente.id}/").data
+        self.assertEqual(dados["consultas_realizadas"], 2)
+        self.assertEqual(dados["ultima_consulta"], (hoje - timedelta(days=10)).isoformat())
+        self.assertEqual(dados["proxima_consulta"], (hoje + timedelta(days=5)).isoformat())

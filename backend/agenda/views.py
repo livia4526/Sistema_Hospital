@@ -1,5 +1,7 @@
 from datetime import date, datetime, timedelta
 
+from django.core.exceptions import ValidationError
+from django.db import transaction
 from django.utils import timezone
 from rest_framework import viewsets
 from rest_framework.decorators import action
@@ -130,3 +132,29 @@ class AgendamentoViewSet(viewsets.ModelViewSet):
                 "eh_hoje": dia == hoje,
             })
         return Response({"inicio": segunda.isoformat(), "dias": dias})
+
+    @action(detail=True, methods=["post"])
+    def remarcar(self, request, pk=None):
+        """POST /api/agendamentos/5/remarcar/  {"data": "2026-11-03", "horario": "09:00"}
+        O agendamento antigo fica como "remarcada" (cinza) e um novo é criado, ligado a ele."""
+        antigo = self.get_object()
+        if antigo.status != Agendamento.Status.AGENDADA:
+            return Response({"erro": "Só dá para remarcar um agendamento que ainda vai acontecer."}, status=400)
+
+        novo = Agendamento(
+            paciente=antigo.paciente, tipo=antigo.tipo, encaixe=False,
+            data=request.data.get("data"), horario=request.data.get("horario"),
+            motivo=antigo.motivo, olho=antigo.olho, tipo_cirurgia=antigo.tipo_cirurgia,
+            precaucoes=antigo.precaucoes, observacao=antigo.observacao, remarcado_de=antigo,
+        )
+        # transaction.atomic: ou as duas mudanças acontecem, ou nenhuma
+        with transaction.atomic():
+            antigo.status = Agendamento.Status.REMARCADA
+            antigo.save(update_fields=["status"])  # libera o horário antigo antes de validar o novo
+            try:
+                novo.full_clean()
+            except ValidationError as erro:
+                transaction.set_rollback(True)  # desfaz a mudança no antigo
+                return Response(erro.message_dict, status=400)
+            novo.save()
+        return Response(self.get_serializer(novo).data, status=201)

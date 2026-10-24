@@ -35,3 +35,9 @@ export function diaEMes(texto: string): string {
   const [, mes, dia] = texto.split('-')
   return `${dia}/${mes}`
 }
+
+// "2026-10-22" -> "22/10/2026"
+export function diaEMesEAno(texto: string): string {
+  const [ano, mes, dia] = texto.split('-')
+  return `${dia}/${mes}/${ano}`
+}

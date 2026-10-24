@@ -1,4 +1,5 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, type FormEvent } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { AcoesRapidas } from '../components/AcoesRapidas'
 import { AgendaDoDia } from '../components/AgendaDoDia'
 import { Alertas } from '../components/Alertas'
@@ -16,6 +17,13 @@ export function Painel() {
   // O dia que a agenda está mostrando (começa em hoje)
   const [diaDaAgenda, setDiaDaAgenda] = useState(paraTextoISO(new Date()))
   const areaDaAgenda = useRef<HTMLDivElement>(null)
+  const [busca, setBusca] = useState('')
+  const navegar = useNavigate()
+
+  function buscar(evento: FormEvent) {
+    evento.preventDefault()
+    navegar(`/pacientes?q=${encodeURIComponent(busca.trim())}`)
+  }
 
   function verDiaNoCalendario(dataISO: string) {
     setDiaDaAgenda(dataISO)
@@ -27,6 +35,18 @@ export function Painel() {
     <div className="pagina">
       <Cabecalho />
       <main className="painel">
+        <form className="painel-largura-toda painel-busca" onSubmit={buscar} role="search">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" />
+            <path d="M20 20l-3.5-3.5" />
+          </svg>
+          <input
+            placeholder="Pesquisar paciente..."
+            value={busca}
+            onChange={(e) => setBusca(e.target.value)}
+            aria-label="Pesquisar paciente"
+          />
+        </form>
         <div className="painel-coluna">
           <section className="cartao">
             <ResumoHoje versao={versao} />

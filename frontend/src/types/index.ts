@@ -89,6 +89,9 @@ export type Paciente = {
   celular: string
   email: string
   informacoes_complementares: string
+  consultas_realizadas: number
+  ultima_consulta: string | null
+  proxima_consulta: string | null
 }
 
 // Os mesmos valores do modelo Paciente no Django

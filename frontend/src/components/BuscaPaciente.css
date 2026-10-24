@@ -82,3 +82,18 @@
   font-size: 0.75rem;
   color: var(--texto-suave);
 }
+
+.chip-verde {
+  background: var(--verde-agua);
+  color: #1f5c4b;
+}
+
+.chip-azul-escuro {
+  background: var(--azul);
+  color: #fff;
+}
+
+.chip-azul {
+  background: var(--azul-claro);
+  color: #fff;
+}

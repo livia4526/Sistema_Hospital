@@ -1,16 +1,18 @@
 import { useEffect, useState } from 'react'
 import { api } from '../api/cliente'
 import type { Paciente } from '../types'
+import { diaEMesEAno } from '../utils/datas'
 import { mascaraCPF, mascaraCelular } from '../utils/mascaras'
 import './BuscaPaciente.css'
 
 type Props = {
   aoEscolher: (paciente: Paciente) => void
+  textoInicial?: string
 }
 
 // Caixa de busca por nome ou CPF + lista de resultados em cartões
-export function BuscaPaciente({ aoEscolher }: Props) {
-  const [texto, setTexto] = useState('')
+export function BuscaPaciente({ aoEscolher, textoInicial = '' }: Props) {
+  const [texto, setTexto] = useState(textoInicial)
   const [resultados, setResultados] = useState<Paciente[] | null>(null)
   const [erro, setErro] = useState(false)
 
@@ -63,6 +65,13 @@ export function BuscaPaciente({ aoEscolher }: Props) {
                   <span className="chip">{mascaraCelular(p.celular)}</span>
                   <span className="chip">Plano: {p.plano === 'outros' ? p.plano_outro : p.plano_nome}</span>
                   <span className="chip">{p.idade} anos</span>
+                  <span className="chip chip-verde">Atendimentos realizados: {p.consultas_realizadas}</span>
+                  {p.ultima_consulta && (
+                    <span className="chip chip-azul-escuro">Último: {diaEMesEAno(p.ultima_consulta)}</span>
+                  )}
+                  {p.proxima_consulta && (
+                    <span className="chip chip-azul">Próximo: {diaEMesEAno(p.proxima_consulta)}</span>
+                  )}
                 </span>
               </button>
             </li>

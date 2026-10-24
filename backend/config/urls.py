@@ -7,7 +7,7 @@ from pacientes.views import PacienteViewSet
 
 # O router cria sozinho os endereços de cada ViewSet
 router = DefaultRouter()
-router.register("pacientes", PacienteViewSet)
+router.register("pacientes", PacienteViewSet, basename="paciente")
 router.register("agendamentos", AgendamentoViewSet, basename="agendamento")
 
 urlpatterns = [

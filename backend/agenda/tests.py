@@ -229,3 +229,30 @@ class AgendamentoAPITest(TestCase):
         livres = self.client.get(f"/api/agendamentos/horarios-livres/?data={hoje}").data["horarios"]
         agora = timezone.localtime().strftime("%H:%M")
         self.assertTrue(all(h > agora for h in livres))
+
+    def test_remarcar(self):
+        antigo = self.client.post("/api/agendamentos/", self.consulta).data
+        resposta = self.client.post(
+            f"/api/agendamentos/{antigo['id']}/remarcar/", {"data": "2030-03-05", "horario": "10:00"}
+        )
+        self.assertEqual(resposta.status_code, 201)
+        self.assertEqual(resposta.data["data"], "2030-03-05")
+        self.assertEqual(Agendamento.objects.get(pk=antigo["id"]).status, "remarcada")
+        self.assertEqual(Agendamento.objects.get(pk=resposta.data["id"]).remarcado_de_id, antigo["id"])
+
+    def test_remarcar_para_horario_ocupado_nao_muda_nada(self):
+        antigo = self.client.post("/api/agendamentos/", self.consulta).data
+        self.client.post("/api/agendamentos/", {**self.consulta, "horario": "11:00"})
+        resposta = self.client.post(
+            f"/api/agendamentos/{antigo['id']}/remarcar/", {"data": "2030-03-04", "horario": "11:00"}
+        )
+        self.assertEqual(resposta.status_code, 400)
+        self.assertEqual(Agendamento.objects.get(pk=antigo["id"]).status, "agendada")
+        self.assertEqual(Agendamento.objects.count(), 2)
+
+    def test_remarcar_para_o_mesmo_dia_em_outro_horario(self):
+        antigo = self.client.post("/api/agendamentos/", self.consulta).data
+        resposta = self.client.post(
+            f"/api/agendamentos/{antigo['id']}/remarcar/", {"data": "2030-03-04", "horario": "15:00"}
+        )
+        self.assertEqual(resposta.status_code, 201)
